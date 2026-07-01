@@ -15,9 +15,28 @@ export default {
         options: { source: 'title' }
       },
       {
+        name: 'description',
+        type: 'text',
+        title: 'Описание торта',
+        description: 'Краткое описание начинки, ингредиентов или особенностей.'
+      },
+      {
         name: 'price',
         type: 'number',
-        title: 'Цена (в лари)'
+        title: 'Актуальная цена (в лари)'
+      },
+      {
+        name: 'oldPrice',
+        type: 'number',
+        title: 'Старая цена (зачеркнутая)',
+        description: 'Необязательное поле. Если заполнено, будет выводиться зачеркнутым рядом с актуальной ценой.'
+      },
+      {
+        name: 'isBestseller',
+        type: 'boolean',
+        title: 'Показывать на главной (Хит продаж)',
+        description: 'Включите тумблер, чтобы этот торт появился в блоке "Любимые торты наших гостей".',
+        initialValue: false
       },
       {
         name: 'image',

@@ -1,6 +1,7 @@
 import { MapPin, Clock, Send, MessageCircle } from 'lucide-react'
 import { Reveal } from '@/components/reveal'
 import { Flourish } from '@/components/flourish'
+import Image from 'next/image'
 
 export function SiteFooter() {
   return (
@@ -78,9 +79,15 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-24 flex flex-col items-center justify-between gap-6 border-t border-border pt-10 text-sm text-muted-foreground md:flex-row">
-          <span className="font-serif text-xl tracking-[0.2em] text-foreground">
-            MarO
-          </span>
+        <a href="#top" className="flex items-center">
+            <Image
+              src="/logo.jpg"
+              alt="Логотип авторской кондитерской MarO в Батуми"
+              width={100}
+              height={40}
+              className="object-contain"
+            />
+          </a>
           <p>© {new Date().getFullYear()} MarO. Батуми, Грузия.</p>
           <div className="flex gap-6">
             <a

@@ -1,34 +1,34 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { Reveal } from '@/components/reveal'
+import { client } from '@/sanity/lib/client'
+import { urlFor } from '@/sanity/lib/image'
 
-const cakes = [
-  {
-    name: 'Ванильный с ягодами',
-    price: '160 ₾',
-    image: '/images/cake-1.png',
-    alt: 'Ванильный бисквитный торт со свежими ягодами',
-  },
-  {
-    name: 'Шоколадный ганаш',
-    price: '180 ₾',
-    image: '/images/cake-2.png',
-    alt: 'Шоколадный торт с глянцевым ганашем и золотым акцентом',
-  },
-  {
-    name: 'Клубничный мусс',
-    price: '175 ₾',
-    image: '/images/cake-3.png',
-    alt: 'Нежный клубничный муссовый торт',
-  },
-  {
-    name: 'Фисташковый',
-    price: '190 ₾',
-    image: '/images/cake-4.png',
-    alt: 'Фисташковый торт с зелёным кремом',
-  },
-]
+// Типизация для данных, которые мы получаем из Sanity
+interface Cake {
+  _id: string
+  title: string
+  description?: string
+  price: number
+  oldPrice?: number
+  image: any
+}
 
-export function Bestsellers() {
+export async function Bestsellers() {
+  // GROQ-запрос: ищем документы типа 'cake', где включен тумблер isBestseller.
+  // Берем максимум 4 штуки, сортируем от новых к старым.
+  const query = `*[_type == "cake" && isBestseller == true] | order(_createdAt desc)[0...4] {
+    _id,
+    title,
+    description,
+    price,
+    oldPrice,
+    image
+  }`
+
+  // Делаем серверный запрос к БД
+  const cakes: Cake[] = await client.fetch(query)
+
   return (
     <section id="bestsellers" className="px-6 py-24 md:px-12 md:py-40">
       <div className="mx-auto max-w-7xl">
@@ -38,7 +38,7 @@ export function Bestsellers() {
               Торты на заказ
             </p>
             <h2 className="text-balance font-serif text-4xl font-light leading-tight text-foreground md:text-5xl">
-              Любимые начинки наших гостей
+              Любимые торты наших гостей
             </h2>
           </div>
           <p className="max-w-sm text-pretty leading-relaxed text-muted-foreground">
@@ -47,37 +47,69 @@ export function Bestsellers() {
           </p>
         </Reveal>
 
-        <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-          {cakes.map((cake, i) => (
-            <Reveal key={cake.name} delay={(i % 4) * 0.1}>
-              <article className="group">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
-                  <Image
-                    src={cake.image || '/placeholder.svg'}
-                    alt={cake.alt}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  />
-                </div>
-                <div className="flex items-baseline justify-between pt-6">
-                  <h3 className="font-serif text-xl font-light text-foreground">
-                    {cake.name}
-                  </h3>
-                  <span className="text-sm text-muted-foreground">
-                    {cake.price}
-                  </span>
-                </div>
-                <a
-                  href="#contacts"
-                  className="mt-3 inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-accent hover:underline"
-                >
-                  Заказать
-                </a>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+        {cakes.length > 0 ? (
+          <div className="grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
+            {cakes.map((cake, i) => (
+              <Reveal key={cake._id} delay={(i % 4) * 0.1}>
+                <article className="group flex h-full flex-col">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
+                    <Image
+                      // Проверяем, загружено ли фото. Если да — пропускаем через оптимизатор Sanity
+                      src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
+                      alt={cake.title}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  <div className="flex flex-col flex-grow pt-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <h3 className="font-serif text-xl font-light text-foreground">
+                        {cake.title}
+                      </h3>
+                      <div className="flex flex-col items-end whitespace-nowrap">
+                        {cake.oldPrice && (
+                          <span className="text-xs text-muted-foreground line-through">
+                            {cake.oldPrice} ₾
+                          </span>
+                        )}
+                        <span className="text-sm font-medium text-foreground">
+                          {cake.price} ₾
+                        </span>
+                      </div>
+                    </div>
+                    {cake.description && (
+                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                        {cake.description}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-4">
+                    <a
+                      href="#contacts"
+                      className="inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-accent hover:underline"
+                    >
+                      Заказать
+                    </a>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground">
+            Витрина пока пуста. Добавьте хиты продаж в панели управления.
+          </p>
+        )}
+
+        <Reveal delay={0.4} className="mt-16 flex justify-center md:mt-24">
+          <Link
+            href="/catalog"
+            className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm tracking-wide text-foreground transition-all hover:bg-foreground hover:text-background"
+          >
+            Смотреть все торты
+          </Link>
+        </Reveal>
       </div>
     </section>
   )

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image';
 
 const nav = [
   { label: 'Выпечка', href: '#directions' },
@@ -26,11 +27,15 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 md:px-12 md:py-8">
-        <a
-          href="#top"
-          className="font-serif text-2xl font-medium tracking-[0.2em] text-foreground"
-        >
-          MarO
+      <a href="#top" className="flex items-center">
+          <Image
+            src="/logo.jpg"
+            alt="Логотип авторской кондитерской MarO в Батуми"
+            width={140}
+            height={60}
+            priority
+            className="object-contain"
+          />
         </a>
 
         <nav className="hidden items-center gap-10 md:flex">
