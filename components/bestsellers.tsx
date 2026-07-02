@@ -4,7 +4,6 @@ import { Reveal } from '@/components/reveal'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 
-// Типизация для данных, которые мы получаем из Sanity
 interface Cake {
   _id: string
   title: string
@@ -15,9 +14,8 @@ interface Cake {
 }
 
 export async function Bestsellers() {
-  // GROQ-запрос: ищем документы типа 'cake', где включен тумблер isBestseller.
-  // Берем максимум 4 штуки, сортируем от новых к старым.
-  const query = `*[_type == "cake" && isBestseller == true] | order(_createdAt desc)[0...4] {
+  // Выводим 8 позиций для главной страницы
+  const query = `*[_type == "cake" && isBestseller == true] | order(_createdAt desc)[0...8] {
     _id,
     title,
     description,
@@ -26,7 +24,6 @@ export async function Bestsellers() {
     image
   }`
 
-  // Делаем серверный запрос к БД
   const cakes: Cake[] = await client.fetch(query)
 
   return (
@@ -54,7 +51,6 @@ export async function Bestsellers() {
                 <article className="group flex h-full flex-col">
                   <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
                     <Image
-                      // Проверяем, загружено ли фото. Если да — пропускаем через оптимизатор Sanity
                       src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
                       alt={cake.title}
                       fill
@@ -87,7 +83,7 @@ export async function Bestsellers() {
                   <div className="mt-4">
                     <a
                       href="#contacts"
-                      className="inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-accent hover:underline"
+                      className="inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-rose-400 hover:underline"
                     >
                       Заказать
                     </a>
@@ -104,10 +100,10 @@ export async function Bestsellers() {
 
         <Reveal delay={0.4} className="mt-16 flex justify-center md:mt-24">
           <Link
-            href="/catalog"
+            href="/prices"
             className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm tracking-wide text-foreground transition-all hover:bg-foreground hover:text-background"
           >
-            Смотреть все торты
+            Смотреть все цены
           </Link>
         </Reveal>
       </div>

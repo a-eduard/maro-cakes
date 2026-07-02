@@ -1,8 +1,12 @@
 import { type SchemaTypeDefinition } from 'sanity'
-// Импортируем твой созданный файл
-import cake from './cake' 
+import cake from './cake'
+import post from './post'
+import settings from './settings'
+import about from './about'
+import review from './review'
+import education from './education'
+import gallery from './gallery'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  // Добавляем импортированную схему в массив
-  types: [cake], 
+  types: [cake, post, settings, about, review, education, gallery], 
 }

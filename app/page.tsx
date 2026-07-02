@@ -1,11 +1,11 @@
 import { SiteHeader } from '@/components/site-header'
-import { Hero } from '@/components/hero'
-import { Directions } from '@/components/directions'
-import { Bestsellers } from '@/components/bestsellers'
 import { Gallery } from '@/components/gallery'
+import { About } from '@/components/about'
+import { Bestsellers } from '@/components/bestsellers'
+import { Education } from '@/components/education'
+import { Reviews } from '@/components/reviews'
 import { SiteFooter } from '@/components/site-footer'
 import { BoxLines } from '@/components/box-lines'
-import Image from 'next/image';
 
 export default function Page() {
   return (
@@ -15,10 +15,11 @@ export default function Page() {
 
       <SiteHeader />
       <main>
-        <Hero />
-        <Directions />
-        <Bestsellers />
         <Gallery />
+        <About />
+        <Bestsellers />
+        <Education />
+        <Reviews />
       </main>
       <SiteFooter />
     </div>

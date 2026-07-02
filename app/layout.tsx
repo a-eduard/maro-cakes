@@ -1,13 +1,19 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Geist, Cormorant_Garamond } from 'next/font/google'
+import { Montserrat, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
+// Используем Montserrat вместо Geist, сохраняя имя переменной, чтобы не ломать Tailwind
+const montserrat = Montserrat({ 
+  variable: '--font-geist-sans', 
+  subsets: ['latin', 'cyrillic'],
+  weight: ['300', '400', '500', '600']
+})
+
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600'],
+  subsets: ['latin', 'cyrillic'],
+  weight: ['300', '400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -30,7 +36,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${geistSans.variable} ${cormorant.variable} bg-background`}
+      className={`${montserrat.variable} ${cormorant.variable} bg-background`}
     >
       <body className="font-sans antialiased">
         {children}
