@@ -6,7 +6,8 @@ import about from './about'
 import review from './review'
 import education from './education'
 import gallery from './gallery'
+import cakeBuilder from './cakeBuilder'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [cake, post, settings, about, review, education, gallery], 
+  types: [cake, post, settings, about, review, education, gallery, cakeBuilder], 
 }

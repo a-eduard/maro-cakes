@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
+import { CakeBuilder } from '@/components/cake-builder'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 
@@ -21,9 +22,17 @@ interface Cake {
 }
 
 export default async function PricesPage() {
-  // Получаем ВСЕ торты и десерты из базы данных
-  const query = `*[_type == "cake"] | order(_createdAt desc)`
-  const cakes: Cake[] = await client.fetch(query)
+  // Запрашиваем торты
+  const cakesQuery = `*[_type == "cake"] | order(_createdAt desc)`
+  const cakes: Cake[] = await client.fetch(cakesQuery)
+
+  // Запрашиваем настройки конструктора и телефон
+  const builderQuery = `*[_type == "cakeBuilder"][0]`
+  const builderData = await client.fetch(builderQuery)
+  
+  const settingsQuery = `*[_type == "settings"][0]`
+  const settingsData = await client.fetch(settingsQuery)
+  const phone = settingsData?.whatsapp || '+995500000000'
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -41,8 +50,9 @@ export default async function PricesPage() {
               </p>
             </Reveal>
 
+            {/* Каталог готовых тортов */}
             {cakes.length > 0 ? (
-              <div className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mb-32 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {cakes.map((cake, i) => (
                   <Reveal key={cake._id} delay={(i % 4) * 0.1}>
                     <article className="group flex h-full flex-col">
@@ -90,8 +100,25 @@ export default async function PricesPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-center text-muted-foreground">Меню обновляется.</p>
+              <p className="mb-32 text-center text-muted-foreground">Меню обновляется.</p>
             )}
+
+            {/* Блок Конструктора */}
+            {builderData && (
+              <Reveal>
+                <div className="mb-12 text-center">
+                  <h2 className="font-serif text-4xl font-light text-foreground md:text-5xl">
+                    Не нашли то, что искали?
+                  </h2>
+                  <p className="mt-4 text-lg text-muted-foreground">
+                    Соберите свой идеальный торт в нашем конструкторе
+                  </p>
+                </div>
+                
+                <CakeBuilder data={builderData} whatsappPhone={phone} />
+              </Reveal>
+            )}
+
           </div>
         </section>
       </main>
