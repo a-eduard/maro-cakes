@@ -1,19 +1,34 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Montserrat, Cormorant_Garamond } from 'next/font/google'
-import { CookieBanner } from '@/components/cookie-banner' // Добавили импорт
+import { Manrope, Noto_Sans_Georgian, Cormorant_Garamond, Noto_Serif_Georgian } from 'next/font/google'
+import { CookieBanner } from '@/components/cookie-banner'
 import './globals.css'
 
-// Используем Montserrat вместо Geist, сохраняя имя переменной, чтобы не ломать Tailwind
-const montserrat = Montserrat({ 
-  variable: '--font-geist-sans', 
+// 1. Основной шрифт без засечек (Русский, Английский)
+const manrope = Manrope({ 
+  variable: '--font-manrope', 
   subsets: ['latin', 'cyrillic'],
-  weight: ['300', '400', '500', '600']
+  weight: ['300', '400', '500', '600', '700']
 })
 
+// 2. Резервный шрифт без засечек (Грузинский)
+const notoGeorgian = Noto_Sans_Georgian({ 
+  variable: '--font-noto-georgian', 
+  subsets: ['georgian'],
+  weight: ['300', '400', '500', '600', '700']
+})
+
+// 3. Основной шрифт с засечками для заголовков (Русский, Английский)
 const cormorant = Cormorant_Garamond({
   variable: '--font-cormorant',
   subsets: ['latin', 'cyrillic'],
+  weight: ['300', '400', '500', '600', '700'],
+})
+
+// 4. Резервный шрифт с засечками для заголовков (Грузинский)
+const notoSerifGeorgian = Noto_Serif_Georgian({
+  variable: '--font-noto-serif-georgian',
+  subsets: ['georgian'],
   weight: ['300', '400', '500', '600', '700'],
 })
 
@@ -37,11 +52,12 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${montserrat.variable} ${cormorant.variable} bg-background`}
+      // Передаем все 4 CSS-переменные шрифтов в корневой тег
+      className={`${manrope.variable} ${notoGeorgian.variable} ${cormorant.variable} ${notoSerifGeorgian.variable} bg-background`}
     >
       <body className="font-sans antialiased">
         {children}
-        <CookieBanner /> {/* Добавили вызов компонента */}
+        <CookieBanner />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
