@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { motion } from 'motion/react'
-import { MessageCircle } from 'lucide-react'
+import { motion, AnimatePresence } from 'motion/react'
+import { Loader2, Check } from 'lucide-react'
+import { urlFor } from '@/sanity/lib/image'
 
 // Типизация данных из Sanity
 interface BuilderOption {
@@ -12,22 +13,33 @@ interface BuilderOption {
   price?: number
 }
 
+interface Combination {
+  biscuitName: string
+  fillingName: string
+  image: any
+}
+
 interface CakeBuilderProps {
   data: {
     basePrice: number
     biscuits: BuilderOption[]
     fillings: BuilderOption[]
     decorations: BuilderOption[]
+    combinations?: Combination[]
   }
-  whatsappPhone: string
 }
 
-export function CakeBuilder({ data, whatsappPhone }: CakeBuilderProps) {
+export function CakeBuilder({ data }: CakeBuilderProps) {
   const [weight, setWeight] = useState<number>(2)
   const [biscuit, setBiscuit] = useState<BuilderOption | null>(null)
   const [filling, setFilling] = useState<BuilderOption | null>(null)
   const [decoration, setDecoration] = useState<BuilderOption | null>(null)
   const [wishes, setWishes] = useState<string>('')
+  const [phone, setPhone] = useState<string>('')
+  
+  // Состояния для кнопки отправки
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   // Расчет итоговой стоимости
   const calculateTotal = () => {
@@ -41,27 +53,66 @@ export function CakeBuilder({ data, whatsappPhone }: CakeBuilderProps) {
     return total
   }
 
-  // Генерация ссылки для WhatsApp
-  const handleOrder = () => {
+  // Отправка заявки
+  const handleOrder = async () => {
     if (!biscuit || !filling) {
       alert('Пожалуйста, выберите бисквит и начинку перед заказом.')
       return
     }
+    if (!phone.trim()) {
+      alert('Пожалуйста, укажите ваш номер телефона или логин в Telegram.')
+      return
+    }
+
+    setIsSubmitting(true)
 
     const total = calculateTotal()
-    const text = `Здравствуйте! Я хочу собрать торт на заказ:
-- Вес: ${weight} кг
-- Бисквит: ${biscuit.name}
-- Начинка: ${filling.name}
-- Декор: ${decoration?.name || 'Без декора'}
-- Пожелания: ${wishes || 'Нет'}
+    
+    // Формируем красивый текст для Telegram
+    const text = `🎂 *Новый заказ из конструктора!*\n\n` +
+      `📞 *Связь:* ${phone}\n` +
+      `⚖️ *Вес:* ${weight} кг\n` +
+      `🍰 *Бисквит:* ${biscuit.name}\n` +
+      `🍓 *Начинка:* ${filling.name}\n` +
+      `✨ *Декор:* ${decoration?.name || 'Без декора'}\n` +
+      `📝 *Пожелания:* ${wishes || 'Нет'}\n\n` +
+      `💰 *Примерная стоимость:* ${total} ₾`
 
-Примерная стоимость: ${total} ₾. Подтвердите, пожалуйста, заказ.`
+    try {
+      // Отправляем данные на наш внутренний API маршрут
+      const response = await fetch('/api/telegram', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: text }),
+      })
 
-    const formattedPhone = whatsappPhone.replace(/[^0-9]/g, '')
-    const url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(text)}`
-    window.open(url, '_blank')
+      if (response.ok) {
+        setIsSuccess(true)
+        // Опционально: можно очистить форму после успешной отправки
+        // setPhone('')
+        // setWishes('')
+      } else {
+        alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.')
+      }
+    } catch (error) {
+      alert('Ошибка сети. Пожалуйста, проверьте подключение и попробуйте снова.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
+
+  // Ищем совпадение: есть ли картинка для выбранного бисквита и начинки
+  const currentCombo = data.combinations?.find(
+    (combo) => 
+      combo.biscuitName === biscuit?.name && 
+      combo.fillingName === filling?.name
+  )
+
+  const displayImageUrl = currentCombo?.image
+    ? urlFor(currentCombo.image).url()
+    : '/images/hero-cake.png'
 
   return (
     <div className="rounded-[2rem] border border-border/60 bg-accent/5 p-6 md:p-12">
@@ -172,13 +223,23 @@ export function CakeBuilder({ data, whatsappPhone }: CakeBuilderProps) {
         <div className="flex h-full flex-col">
           <div className="sticky top-32 flex flex-col items-center rounded-2xl bg-white p-8 shadow-sm">
             <div className="relative mb-8 aspect-square w-full max-w-[280px] overflow-hidden rounded-full border-4 border-rose-50">
-              {/* Статичная красивая картинка-заглушка для конструктора */}
-              <Image
-                src="/images/hero-cake.png"
-                alt="Ваш идеальный торт"
-                fill
-                className="object-cover"
-              />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={displayImageUrl}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={displayImageUrl}
+                    alt="Ваш идеальный торт"
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              </AnimatePresence>
             </div>
             
             <div className="w-full border-t border-dashed border-border/60 pt-6">
@@ -205,13 +266,44 @@ export function CakeBuilder({ data, whatsappPhone }: CakeBuilderProps) {
                 </span>
               </div>
 
-              <button
-                onClick={handleOrder}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-rose-400 py-4 text-sm tracking-wide text-white transition-all hover:-translate-y-1 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-400/30"
-              >
-                <MessageCircle className="h-5 w-5" />
-                Оформить в WhatsApp
-              </button>
+              {/* Блок с номером телефона и кнопкой */}
+              <div className="flex flex-col gap-4">
+                <input
+                  type="text"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Ваш телефон (WhatsApp / Telegram)"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  disabled={isSuccess || isSubmitting}
+                />
+                
+                <button
+                  onClick={handleOrder}
+                  disabled={isSuccess || isSubmitting}
+                  className={`flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm tracking-wide text-white transition-all ${
+                    isSuccess 
+                      ? 'bg-green-500 hover:bg-green-600' 
+                      : 'bg-rose-400 hover:-translate-y-1 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-400/30'
+                  } disabled:cursor-not-allowed disabled:opacity-90 disabled:hover:translate-y-0`}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                  ) : isSuccess ? (
+                    <>
+                      <Check className="h-5 w-5" />
+                      Заявка отправлена
+                    </>
+                  ) : (
+                    'Заказать'
+                  )}
+                </button>
+              </div>
+              
+              {isSuccess && (
+                <p className="mt-4 text-center text-xs text-muted-foreground">
+                  Мы свяжемся с вами в ближайшее время для подтверждения заказа.
+                </p>
+              )}
             </div>
           </div>
         </div>

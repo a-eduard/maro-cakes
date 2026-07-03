@@ -26,13 +26,9 @@ export default async function PricesPage() {
   const cakesQuery = `*[_type == "cake"] | order(_createdAt desc)`
   const cakes: Cake[] = await client.fetch(cakesQuery)
 
-  // Запрашиваем настройки конструктора и телефон
+  // Запрашиваем настройки конструктора
   const builderQuery = `*[_type == "cakeBuilder"][0]`
   const builderData = await client.fetch(builderQuery)
-  
-  const settingsQuery = `*[_type == "settings"][0]`
-  const settingsData = await client.fetch(settingsQuery)
-  const phone = settingsData?.whatsapp || '+995500000000'
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -115,7 +111,7 @@ export default async function PricesPage() {
                   </p>
                 </div>
                 
-                <CakeBuilder data={builderData} whatsappPhone={phone} />
+                <CakeBuilder data={builderData} />
               </Reveal>
             )}
 
