@@ -4,17 +4,15 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 
 export async function About() {
-  // Запрашиваем документ "О нас" из Sanity
   const query = `*[_type == "about"][0]`
   const about = await client.fetch(query)
 
-  // Если клиент еще не заполнил данные, не выводим блок, чтобы не ломать верстку
   if (!about) return null
 
   return (
-    <section id="about" className="px-6 py-24 md:px-12 md:py-40 bg-accent/5">
+    <section id="about" className="bg-accent/5 px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-center">
+        <div className="grid grid-cols-1 gap-8 sm:gap-12 md:grid-cols-2 md:items-center">
           <Reveal>
             <div className="relative aspect-square overflow-hidden rounded-[1.5rem]">
               <Image
@@ -27,14 +25,14 @@ export async function About() {
             </div>
           </Reveal>
           
-          <Reveal delay={0.2} className="flex flex-col gap-6">
+          <Reveal delay={0.2} className="flex flex-col gap-4 sm:gap-6">
             <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
               О нас
             </p>
-            <h2 className="font-serif text-4xl font-light leading-tight text-foreground md:text-5xl">
+            <h2 className="font-serif text-3xl font-light leading-tight text-foreground sm:text-4xl md:text-5xl">
               {about.title}
             </h2>
-            <p className="leading-relaxed text-muted-foreground whitespace-pre-line">
+            <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
               {about.description}
             </p>
           </Reveal>

@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Montserrat, Cormorant_Garamond } from 'next/font/google'
+import { CookieBanner } from '@/components/cookie-banner' // Добавили импорт
 import './globals.css'
 
 // Используем Montserrat вместо Geist, сохраняя имя переменной, чтобы не ломать Tailwind
@@ -40,6 +41,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased">
         {children}
+        <CookieBanner /> {/* Добавили вызов компонента */}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

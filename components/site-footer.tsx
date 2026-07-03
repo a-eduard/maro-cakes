@@ -157,12 +157,12 @@ export async function SiteFooter() {
               Частые вопросы (FAQ)
             </Link>
             <span className="hidden md:inline text-border">|</span>
-            <a
-              href="#"
+            <Link
+              href="/privacy"
               className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
               Политика конфиденциальности
-            </a>
+            </Link>
             <span className="hidden md:inline text-border">|</span>
             <a
               href="https://exapp.tech"

@@ -79,7 +79,6 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
 
     const total = calculateTotal()
     
-    // Формируем красивый текст для Telegram
     const text = `🎂 *Новый заказ из конструктора!*\n\n` +
       `📞 *Связь:* ${phone}\n` +
       `📅 *Дата:* ${deliveryDate}\n` +
@@ -112,7 +111,6 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
     }
   }
 
-  // Ищем совпадение: есть ли картинка для выбранного бисквита и начинки
   const currentCombo = data.combinations?.find(
     (combo) => 
       combo.biscuitName === biscuit?.name && 
@@ -124,19 +122,19 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
     : '/images/hero-cake.png'
 
   return (
-    <div className="rounded-[2rem] border border-border/60 bg-accent/5 p-6 md:p-12">
+    <div className="rounded-[1.5rem] border border-border/60 bg-accent/5 p-4 sm:rounded-[2rem] sm:p-8 md:p-12">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         
         {/* Левая колонка: Настройки */}
-        <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-8 sm:gap-10">
           <div>
-            <h3 className="mb-4 font-serif text-2xl text-foreground">1. Вес торта (кг)</h3>
-            <div className="flex flex-wrap gap-3">
+            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">1. Вес торта (кг)</h3>
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {[1, 1.5, 2, 2.5, 3, 4, 5].map((w) => (
                 <button
                   key={w}
                   onClick={() => setWeight(w)}
-                  className={`rounded-full px-6 py-2 text-sm transition-colors ${
+                  className={`rounded-full px-4 py-2 text-sm sm:px-6 transition-colors ${
                     weight === w
                       ? 'bg-rose-400 text-white'
                       : 'border border-border bg-transparent text-muted-foreground hover:border-rose-400 hover:text-rose-400'
@@ -149,8 +147,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-2xl text-foreground">2. Бисквит</h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">2. Бисквит</h3>
+            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
               {data.biscuits?.map((item, i) => (
                 <button
                   key={i}
@@ -173,8 +171,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-2xl text-foreground">3. Начинка</h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">3. Начинка</h3>
+            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
               {data.fillings?.map((item, i) => (
                 <button
                   key={i}
@@ -197,8 +195,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-2xl text-foreground">4. Декор</h3>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">4. Декор</h3>
+            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
               {data.decorations?.map((item, i) => (
                 <button
                   key={i}
@@ -210,19 +208,19 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   }`}
                 >
                   <span className="block font-medium">{item.name}</span>
-                  <span className="text-xs opacity-70">+{item.price} ₾ (фиксированно)</span>
+                  <span className="text-xs opacity-70">+{item.price} ₾ (фикс.)</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-2xl text-foreground">5. Пожелания (надпись, аллергия)</h3>
+            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">5. Пожелания (надпись, аллергия)</h3>
             <textarea
               rows={3}
               value={wishes}
               onChange={(e) => setWishes(e.target.value)}
-              placeholder="Например: Надпись 'С Днем Рождения, мама!'. Без добавления орехов."
+              placeholder="Например: Надпись 'С Днем Рождения!'. Без орехов."
               className="w-full resize-none rounded-xl border border-border/60 bg-transparent p-4 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
             />
           </div>
@@ -230,8 +228,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
 
         {/* Правая колонка: Итог и фото */}
         <div className="flex h-full flex-col">
-          <div className="sticky top-32 flex flex-col items-center rounded-2xl bg-white p-8 shadow-sm">
-            <div className="relative mb-8 aspect-square w-full max-w-[280px] overflow-hidden rounded-full border-4 border-rose-50">
+          <div className="sticky top-24 flex flex-col items-center rounded-2xl bg-white p-6 sm:p-8 shadow-sm">
+            <div className="relative mb-6 sm:mb-8 aspect-square w-full max-w-[200px] sm:max-w-[280px] overflow-hidden rounded-full border-4 border-rose-50">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={displayImageUrl}
@@ -252,25 +250,25 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
             </div>
             
             <div className="w-full border-t border-dashed border-border/60 pt-6">
-              <h4 className="mb-4 font-serif text-xl">Ваш заказ:</h4>
+              <h4 className="mb-4 font-serif text-lg sm:text-xl">Ваш заказ:</h4>
               <ul className="mb-6 flex flex-col gap-2 text-sm text-muted-foreground">
                 <li className="flex justify-between">
-                  <span>Вес:</span> <span className="text-foreground">{weight} кг</span>
+                  <span>Вес:</span> <span className="text-foreground text-right">{weight} кг</span>
                 </li>
                 <li className="flex justify-between">
-                  <span>Бисквит:</span> <span className="text-foreground">{biscuit?.name || 'Не выбран'}</span>
+                  <span>Бисквит:</span> <span className="text-foreground text-right">{biscuit?.name || 'Не выбран'}</span>
                 </li>
                 <li className="flex justify-between">
-                  <span>Начинка:</span> <span className="text-foreground">{filling?.name || 'Не выбрана'}</span>
+                  <span>Начинка:</span> <span className="text-foreground text-right">{filling?.name || 'Не выбрана'}</span>
                 </li>
                 <li className="flex justify-between">
-                  <span>Декор:</span> <span className="text-foreground">{decoration?.name || 'Без декора'}</span>
+                  <span>Декор:</span> <span className="text-foreground text-right">{decoration?.name || 'Без декора'}</span>
                 </li>
               </ul>
               
-              <div className="mb-8 flex items-end justify-between border-t border-border pt-6">
-                <span className="font-serif text-lg">Итого:</span>
-                <span className="font-serif text-4xl text-rose-400">
+              <div className="mb-6 sm:mb-8 flex items-end justify-between border-t border-border pt-4 sm:pt-6">
+                <span className="font-serif text-base sm:text-lg">Итого:</span>
+                <span className="font-serif text-3xl sm:text-4xl text-rose-400">
                   {calculateTotal()} ₾
                 </span>
               </div>
@@ -278,7 +276,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
               {/* Блок с контактными данными и кнопкой */}
               <div className="flex flex-col gap-3">
                 <div className="relative">
-                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
                     Дата:
                   </span>
                   <input
@@ -286,7 +284,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                     min={today}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4.5rem] pr-6 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4rem] pr-4 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
                     disabled={isSuccess || isSubmitting}
                   />
                 </div>
@@ -296,7 +294,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   placeholder="Адрес доставки (или самовывоз)"
-                  className="w-full rounded-full border border-border/60 bg-transparent px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
                   disabled={isSuccess || isSubmitting}
                 />
                 
@@ -305,14 +303,14 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Ваш телефон (WhatsApp / Telegram)"
-                  className="w-full rounded-full border border-border/60 bg-transparent px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
                   disabled={isSuccess || isSubmitting}
                 />
                 
                 <button
                   onClick={handleOrder}
                   disabled={isSuccess || isSubmitting}
-                  className={`mt-1 flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm tracking-wide text-white transition-all ${
+                  className={`mt-1 flex w-full items-center justify-center gap-2 rounded-full py-3 sm:py-4 text-sm tracking-wide text-white transition-all ${
                     isSuccess 
                       ? 'bg-green-500 hover:bg-green-600' 
                       : 'bg-rose-400 hover:-translate-y-1 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-400/30'
@@ -333,7 +331,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
               
               {isSuccess && (
                 <p className="mt-4 text-center text-xs text-muted-foreground">
-                  Мы свяжемся с вами в ближайшее время для подтверждения заказа.
+                  Мы свяжемся с вами в ближайшее время для подтверждения.
                 </p>
               )}
             </div>
