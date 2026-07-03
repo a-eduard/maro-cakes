@@ -3,6 +3,7 @@ import { Reveal } from '@/components/reveal'
 import { Flourish } from '@/components/flourish'
 import Image from 'next/image'
 import { client } from '@/sanity/lib/client'
+import Link from 'next/link'
 
 export async function SiteFooter() {
   const query = `*[_type == "settings"][0]`
@@ -16,7 +17,6 @@ export async function SiteFooter() {
     workingHours: settings?.workingHours || 'Ежедневно\n10:00 — 20:00'
   }
 
-  // Вспомогательная функция, чтобы убрать https:// и сделать ссылки визуально чище
   const formatLink = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '')
 
   return (
@@ -150,6 +150,13 @@ export async function SiteFooter() {
           </a>
           <p>© {new Date().getFullYear()} MarO. Батуми, Грузия.</p>
           <div className="flex flex-wrap items-center justify-center gap-6">
+            <Link
+              href="/faq"
+              className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
+            >
+              Частые вопросы (FAQ)
+            </Link>
+            <span className="hidden md:inline text-border">|</span>
             <a
               href="#"
               className="underline-offset-4 transition-colors hover:text-foreground hover:underline"

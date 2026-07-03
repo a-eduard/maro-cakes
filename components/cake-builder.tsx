@@ -35,6 +35,10 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
   const [filling, setFilling] = useState<BuilderOption | null>(null)
   const [decoration, setDecoration] = useState<BuilderOption | null>(null)
   const [wishes, setWishes] = useState<string>('')
+  
+  // Контактные данные
+  const [deliveryDate, setDeliveryDate] = useState<string>('')
+  const [deliveryAddress, setDeliveryAddress] = useState<string>('')
   const [phone, setPhone] = useState<string>('')
   
   // Состояния для кнопки отправки
@@ -53,10 +57,17 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
     return total
   }
 
+  // Получаем сегодняшнюю дату в формате YYYY-MM-DD для ограничения выбора в календаре
+  const today = new Date().toISOString().split('T')[0]
+
   // Отправка заявки
   const handleOrder = async () => {
     if (!biscuit || !filling) {
       alert('Пожалуйста, выберите бисквит и начинку перед заказом.')
+      return
+    }
+    if (!deliveryDate) {
+      alert('Пожалуйста, укажите дату, на которую нужен торт.')
       return
     }
     if (!phone.trim()) {
@@ -71,6 +82,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
     // Формируем красивый текст для Telegram
     const text = `🎂 *Новый заказ из конструктора!*\n\n` +
       `📞 *Связь:* ${phone}\n` +
+      `📅 *Дата:* ${deliveryDate}\n` +
+      `📍 *Адрес:* ${deliveryAddress || 'Самовывоз / Не указан'}\n` +
       `⚖️ *Вес:* ${weight} кг\n` +
       `🍰 *Бисквит:* ${biscuit.name}\n` +
       `🍓 *Начинка:* ${filling.name}\n` +
@@ -79,7 +92,6 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
       `💰 *Примерная стоимость:* ${total} ₾`
 
     try {
-      // Отправляем данные на наш внутренний API маршрут
       const response = await fetch('/api/telegram', {
         method: 'POST',
         headers: {
@@ -90,9 +102,6 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
 
       if (response.ok) {
         setIsSuccess(true)
-        // Опционально: можно очистить форму после успешной отправки
-        // setPhone('')
-        // setWishes('')
       } else {
         alert('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.')
       }
@@ -266,8 +275,31 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                 </span>
               </div>
 
-              {/* Блок с номером телефона и кнопкой */}
-              <div className="flex flex-col gap-4">
+              {/* Блок с контактными данными и кнопкой */}
+              <div className="flex flex-col gap-3">
+                <div className="relative">
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                    Дата:
+                  </span>
+                  <input
+                    type="date"
+                    min={today}
+                    value={deliveryDate}
+                    onChange={(e) => setDeliveryDate(e.target.value)}
+                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4.5rem] pr-6 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                    disabled={isSuccess || isSubmitting}
+                  />
+                </div>
+
+                <input
+                  type="text"
+                  value={deliveryAddress}
+                  onChange={(e) => setDeliveryAddress(e.target.value)}
+                  placeholder="Адрес доставки (или самовывоз)"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  disabled={isSuccess || isSubmitting}
+                />
+                
                 <input
                   type="text"
                   value={phone}
@@ -280,7 +312,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                 <button
                   onClick={handleOrder}
                   disabled={isSuccess || isSubmitting}
-                  className={`flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm tracking-wide text-white transition-all ${
+                  className={`mt-1 flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm tracking-wide text-white transition-all ${
                     isSuccess 
                       ? 'bg-green-500 hover:bg-green-600' 
                       : 'bg-rose-400 hover:-translate-y-1 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-400/30'

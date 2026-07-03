@@ -11,6 +11,7 @@ const nav = [
   { label: 'Обучение', href: '/#education' },
   { label: 'Отзывы', href: '/#reviews' },
   { label: 'Блог', href: '/blog' },
+  { label: 'FAQ', href: '/faq' },
   { label: 'Контакты', href: '/#contacts' },
 ]
 
