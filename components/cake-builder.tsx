@@ -136,8 +136,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   onClick={() => setWeight(w)}
                   className={`rounded-full px-4 py-2 text-sm sm:px-6 transition-colors ${
                     weight === w
-                      ? 'bg-rose-400 text-white'
-                      : 'border border-border bg-transparent text-muted-foreground hover:border-rose-400 hover:text-rose-400'
+                      ? 'bg-brand-400 text-white'
+                      : 'border border-border bg-transparent text-muted-foreground hover:border-brand-400 hover:text-brand-400'
                   }`}
                 >
                   {w} кг
@@ -155,8 +155,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   onClick={() => setBiscuit(item)}
                   className={`rounded-xl border p-4 text-left text-sm transition-all ${
                     biscuit?.name === item.name
-                      ? 'border-rose-400 bg-rose-50/50 text-rose-950'
-                      : 'border-border/60 text-muted-foreground hover:border-rose-200'
+                      ? 'border-brand-400 bg-brand-50/50 text-brand-950'
+                      : 'border-border/60 text-muted-foreground hover:border-brand-200'
                   }`}
                 >
                   <span className="block font-medium">{item.name}</span>
@@ -179,8 +179,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   onClick={() => setFilling(item)}
                   className={`rounded-xl border p-4 text-left text-sm transition-all ${
                     filling?.name === item.name
-                      ? 'border-rose-400 bg-rose-50/50 text-rose-950'
-                      : 'border-border/60 text-muted-foreground hover:border-rose-200'
+                      ? 'border-brand-400 bg-brand-50/50 text-brand-950'
+                      : 'border-border/60 text-muted-foreground hover:border-brand-200'
                   }`}
                 >
                   <span className="block font-medium">{item.name}</span>
@@ -203,8 +203,8 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   onClick={() => setDecoration(item)}
                   className={`rounded-xl border p-4 text-left text-sm transition-all ${
                     decoration?.name === item.name
-                      ? 'border-rose-400 bg-rose-50/50 text-rose-950'
-                      : 'border-border/60 text-muted-foreground hover:border-rose-200'
+                      ? 'border-brand-400 bg-brand-50/50 text-brand-950'
+                      : 'border-border/60 text-muted-foreground hover:border-brand-200'
                   }`}
                 >
                   <span className="block font-medium">{item.name}</span>
@@ -221,7 +221,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
               value={wishes}
               onChange={(e) => setWishes(e.target.value)}
               placeholder="Например: Надпись 'С Днем Рождения!'. Без орехов."
-              className="w-full resize-none rounded-xl border border-border/60 bg-transparent p-4 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+              className="w-full resize-none rounded-xl border border-border/60 bg-transparent p-4 text-sm text-foreground outline-none transition-colors focus:border-brand-400"
             />
           </div>
         </div>
@@ -229,7 +229,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
         {/* Правая колонка: Итог и фото */}
         <div className="flex h-full flex-col">
           <div className="sticky top-24 flex flex-col items-center rounded-2xl bg-white p-6 sm:p-8 shadow-sm">
-            <div className="relative mb-6 sm:mb-8 aspect-square w-full max-w-[200px] sm:max-w-[280px] overflow-hidden rounded-full border-4 border-rose-50">
+            <div className="relative mb-6 sm:mb-8 aspect-square w-full max-w-[200px] sm:max-w-[280px] overflow-hidden rounded-full border-4 border-brand-50">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={displayImageUrl}
@@ -268,7 +268,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
               
               <div className="mb-6 sm:mb-8 flex items-end justify-between border-t border-border pt-4 sm:pt-6">
                 <span className="font-serif text-base sm:text-lg">Итого:</span>
-                <span className="font-serif text-3xl sm:text-4xl text-rose-400">
+                <span className="font-serif text-3xl sm:text-4xl text-brand-400">
                   {calculateTotal()} ₾
                 </span>
               </div>
@@ -284,7 +284,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                     min={today}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4rem] pr-4 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4rem] pr-4 text-sm text-foreground outline-none transition-colors focus:border-brand-400"
                     disabled={isSuccess || isSubmitting}
                   />
                 </div>
@@ -294,7 +294,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   placeholder="Адрес доставки (или самовывоз)"
-                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-brand-400"
                   disabled={isSuccess || isSubmitting}
                 />
                 
@@ -303,7 +303,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Ваш телефон (WhatsApp / Telegram)"
-                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-rose-400"
+                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-brand-400"
                   disabled={isSuccess || isSubmitting}
                 />
                 
@@ -313,7 +313,7 @@ export function CakeBuilder({ data }: CakeBuilderProps) {
                   className={`mt-1 flex w-full items-center justify-center gap-2 rounded-full py-3 sm:py-4 text-sm tracking-wide text-white transition-all ${
                     isSuccess 
                       ? 'bg-green-500 hover:bg-green-600' 
-                      : 'bg-rose-400 hover:-translate-y-1 hover:bg-rose-500 hover:shadow-lg hover:shadow-rose-400/30'
+                      : 'bg-brand-400 hover:-translate-y-1 hover:bg-brand-500 hover:shadow-lg hover:shadow-brand-400/30'
                   } disabled:cursor-not-allowed disabled:opacity-90 disabled:hover:translate-y-0`}
                 >
                   {isSubmitting ? (

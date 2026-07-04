@@ -104,7 +104,7 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Текст статьи (PortableText от Sanity) */}
             <Reveal delay={0.3} className="mx-auto max-w-2xl">
-              <div className="space-y-6 text-lg leading-relaxed text-muted-foreground [&>h2]:pt-10 [&>h2]:font-serif [&>h2]:text-3xl [&>h2]:text-foreground [&>h3]:pt-8 [&>h3]:font-serif [&>h3]:text-2xl [&>h3]:text-foreground [&>p]:mb-6 [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>blockquote]:border-l-4 [&>blockquote]:border-rose-400 [&>blockquote]:pl-6 [&>blockquote]:italic [&>blockquote]:text-foreground/80">
+              <div className="space-y-6 text-lg leading-relaxed text-muted-foreground [&>h2]:pt-10 [&>h2]:font-serif [&>h2]:text-3xl [&>h2]:text-foreground [&>h3]:pt-8 [&>h3]:font-serif [&>h3]:text-2xl [&>h3]:text-foreground [&>p]:mb-6 [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>blockquote]:border-l-4 [&>blockquote]:border-brand-400 [&>blockquote]:pl-6 [&>blockquote]:italic [&>blockquote]:text-foreground/80">
                 {post.body ? (
                   <PortableText value={post.body} />
                 ) : (
@@ -117,7 +117,7 @@ export default async function BlogPostPage({ params }: Props) {
             <Reveal delay={0.4} className="mt-20 border-t border-border/60 pt-10 text-center">
               <a
                 href="/blog"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-rose-400 hover:text-rose-500"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-brand-400 hover:text-brand-500"
               >
                 Вернуться к списку статей
               </a>

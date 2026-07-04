@@ -60,12 +60,12 @@ export function SiteHeader() {
           </Link>
 
           {/* Десктопное меню */}
-          <nav className="hidden items-center gap-10 lg:flex">
+          <nav className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-block text-sm tracking-wide text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:text-rose-400"
+                className="inline-block rounded-full px-5 py-2 text-sm tracking-wide text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-brand-500 hover:shadow-md hover:shadow-brand-500/10"
               >
                 {item.label}
               </Link>
@@ -75,7 +75,7 @@ export function SiteHeader() {
           <div className="hidden lg:block">
             <a
               href="#contacts"
-              className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-6 text-sm tracking-wide text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-rose-400 hover:shadow-lg hover:shadow-rose-400/25"
+              className="inline-flex h-10 items-center justify-center rounded-full bg-accent px-6 text-sm tracking-wide text-accent-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-400 hover:shadow-lg hover:shadow-brand-400/25"
             >
               Заказать
             </a>
@@ -112,7 +112,7 @@ export function SiteHeader() {
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="block font-serif text-3xl font-light text-foreground transition-colors hover:text-rose-400"
+                  className="block font-serif text-3xl font-light text-foreground transition-colors hover:text-brand-400"
                 >
                   {item.label}
                 </Link>
@@ -121,7 +121,7 @@ export function SiteHeader() {
                 <a
                   href="#contacts"
                   onClick={() => setIsOpen(false)}
-                  className="inline-flex h-14 w-full items-center justify-center rounded-full bg-rose-400 px-6 text-lg tracking-wide text-white shadow-lg shadow-rose-400/20 transition-all hover:bg-rose-500"
+                  className="inline-flex h-14 w-full items-center justify-center rounded-full bg-brand-400 px-6 text-lg tracking-wide text-white shadow-lg shadow-brand-400/20 transition-all hover:bg-brand-500"
                 >
                   Оформить заказ
                 </a>

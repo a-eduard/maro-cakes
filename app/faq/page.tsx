@@ -62,10 +62,10 @@ export default async function FAQPage() {
                 {faqs.map((faq, index) => (
                   <Reveal key={faq._id} delay={index * 0.1}>
                     {/* Используем встроенный в HTML элемент details для аккордеона */}
-                    <details className="group rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 transition-colors hover:border-rose-200">
+                    <details className="group rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 transition-colors hover:border-brand-200">
                       <summary className="flex cursor-pointer items-center justify-between font-serif text-xl font-medium text-foreground outline-none marker:content-none">
                         {faq.question}
-                        <span className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 transition-transform duration-300 group-open:rotate-180 group-open:border-rose-400 group-open:text-rose-400">
+                        <span className="ml-4 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/60 transition-transform duration-300 group-open:rotate-180 group-open:border-brand-400 group-open:text-brand-400">
                           <ChevronDown className="h-4 w-4" />
                         </span>
                       </summary>

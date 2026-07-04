@@ -60,7 +60,7 @@ export async function Education({ isDetailedView = false }: EducationProps) {
                 <div className="mt-8 sm:mt-10">
                   <a
                     href="#contacts"
-                    className="inline-flex items-center gap-2 text-sm tracking-wide text-foreground transition-colors hover:text-rose-400"
+                    className="inline-flex items-center gap-2 text-sm tracking-wide text-foreground transition-colors hover:text-brand-400"
                   >
                     Записаться
                     <ArrowUpRight className="h-4 w-4" aria-hidden="true" />

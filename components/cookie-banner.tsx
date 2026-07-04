@@ -35,13 +35,13 @@ export function CookieBanner() {
           <div className="flex max-w-sm flex-col gap-4 rounded-2xl border border-border/60 bg-background/95 p-6 shadow-2xl backdrop-blur-md">
             <p className="text-sm leading-relaxed text-muted-foreground">
               Мы используем файлы cookie для улучшения работы сайта и аналитики. Продолжая использовать сайт, вы соглашаетесь с нашей{' '}
-              <Link href="/privacy" className="text-foreground underline underline-offset-4 hover:text-rose-400">
+              <Link href="/privacy" className="text-foreground underline underline-offset-4 hover:text-brand-400">
                 Политикой конфиденциальности
               </Link>.
             </p>
             <button
               onClick={acceptCookies}
-              className="w-full rounded-full bg-rose-400 px-6 py-2.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-rose-500"
+              className="w-full rounded-full bg-brand-400 px-6 py-2.5 text-sm font-medium tracking-wide text-white transition-colors hover:bg-brand-500"
             >
               Согласен
             </button>

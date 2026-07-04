@@ -56,7 +56,7 @@ export default async function BlogPage() {
                         })}
                       </time>
                       <Link href={`/blog/${post.slug?.current || ''}`}>
-                        <h2 className="font-serif text-3xl font-medium text-foreground transition-colors group-hover:text-rose-400">
+                        <h2 className="font-serif text-3xl font-medium text-foreground transition-colors group-hover:text-brand-400">
                           {post.title}
                         </h2>
                       </Link>

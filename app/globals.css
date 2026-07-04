@@ -2,3 +2,53 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
+@layer base {
+  :root {
+    /* Теплый, более плотный бежево-кремовый фон (цвет темного пергамента) */
+    --background: 40 25% 90%; 
+    /* Глубокий темный текст для хорошей читаемости */
+    --foreground: 265 30% 15%; 
+
+    /* Карточки (чуть светлее фона для легкого объема) */
+    --card: 40 30% 95%;
+    --card-foreground: 265 30% 15%;
+    --popover: 40 30% 95%;
+    --popover-foreground: 265 30% 15%;
+
+    /* Основной бренд-цвет (лавандовый #8E6BBF) */
+    --primary: 265 40% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Второстепенные элементы */
+    --secondary: 40 20% 85%;
+    --secondary-foreground: 265 30% 15%;
+
+    /* Приглушенные элементы (рамки, неактивный текст) */
+    --muted: 40 20% 85%;
+    --muted-foreground: 265 15% 45%;
+
+    /* Акценты */
+    --accent: 265 40% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Границы и инпуты */
+    --border: 40 15% 80%;
+    --input: 40 15% 80%;
+    --ring: 265 40% 58%;
+    
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-manrope), var(--font-noto-georgian), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

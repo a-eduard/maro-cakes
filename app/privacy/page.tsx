@@ -25,7 +25,7 @@ export default function PrivacyPage() {
               </p>
             </Reveal>
 
-            <Reveal delay={0.1} className="prose prose-rose prose-lg text-muted-foreground">
+            <Reveal delay={0.1} className="prose pbrand-rose pbrand-lg text-muted-foreground">
               <div className="space-y-8 [&>h2]:font-serif [&>h2]:text-2xl [&>h2]:text-foreground [&>h2]:mt-10 [&>h2]:mb-4 [&>p]:leading-relaxed">
                 
                 <p>

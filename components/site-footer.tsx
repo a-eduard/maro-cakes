@@ -44,7 +44,7 @@ export async function SiteFooter() {
             {/* Блок WhatsApp */}
             <div className="flex items-start gap-4">
               <MessageCircle
-                className="mt-1.5 h-6 w-6 shrink-0 text-rose-400"
+                className="mt-1.5 h-6 w-6 shrink-0 text-brand-400"
                 aria-hidden="true"
               />
               <div className="flex flex-col">
@@ -53,7 +53,7 @@ export async function SiteFooter() {
                 </span>
                 <a
                   href={`tel:${data.whatsapp.replace(/[^0-9+]/g, '')}`}
-                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-rose-400"
+                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-brand-400"
                 >
                   {data.whatsapp}
                 </a>
@@ -63,7 +63,7 @@ export async function SiteFooter() {
             {/* Блок Telegram */}
             <div className="flex items-start gap-4">
               <Send
-                className="mt-1.5 h-6 w-6 shrink-0 text-rose-400"
+                className="mt-1.5 h-6 w-6 shrink-0 text-brand-400"
                 aria-hidden="true"
               />
               <div className="flex flex-col">
@@ -74,7 +74,7 @@ export async function SiteFooter() {
                   href={data.telegram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-rose-400"
+                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-brand-400"
                 >
                   {formatLink(data.telegram)}
                 </a>
@@ -93,7 +93,7 @@ export async function SiteFooter() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="mt-1.5 h-6 w-6 shrink-0 text-rose-400"
+                className="mt-1.5 h-6 w-6 shrink-0 text-brand-400"
                 aria-hidden="true"
               >
                 <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
@@ -108,7 +108,7 @@ export async function SiteFooter() {
                   href={data.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-rose-400"
+                  className="mt-1 text-lg text-muted-foreground transition-colors hover:text-brand-400"
                 >
                   {formatLink(data.instagram)}
                 </a>

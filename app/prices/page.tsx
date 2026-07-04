@@ -86,7 +86,7 @@ export default async function PricesPage() {
                       <div className="mt-6">
                         <a
                           href="#contacts"
-                          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-rose-200 bg-rose-50/50 text-sm tracking-wide text-rose-950 transition-colors hover:bg-rose-400 hover:text-white"
+                          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-brand-200 bg-brand-50/50 text-sm tracking-wide text-brand-950 transition-colors hover:bg-brand-400 hover:text-white"
                         >
                           Заказать
                         </a>

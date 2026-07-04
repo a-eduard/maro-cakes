@@ -31,7 +31,7 @@ export async function Reviews() {
         <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review, i) => (
             <Reveal key={review._id} delay={(i % 3) * 0.1}>
-              <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 sm:p-8 md:p-10 transition-all duration-500 hover:-translate-y-1 hover:border-rose-200 hover:shadow-xl hover:shadow-rose-100/30">
+              <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 sm:p-8 md:p-10 transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/30">
                 <div>
                   <div className="mb-6 sm:mb-8 flex gap-1">
                     {[...Array(review.rating)].map((_, index) => (

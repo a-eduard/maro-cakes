@@ -81,7 +81,7 @@ export async function Bestsellers() {
                   <div className="mt-4">
                     <a
                       href="#contacts"
-                      className="inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-rose-400 hover:underline"
+                      className="inline-block text-sm tracking-wide text-muted-foreground underline-offset-8 transition-colors hover:text-brand-400 hover:underline"
                     >
                       Заказать
                     </a>

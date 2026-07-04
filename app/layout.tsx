@@ -40,8 +40,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light',
-  themeColor: '#f3efe7',
+  colorScheme: 'dark',
+  themeColor: '#0d0d0d',
 }
 
 export default function RootLayout({
@@ -52,8 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      // Передаем все 4 CSS-переменные шрифтов в корневой тег
-      className={`${manrope.variable} ${notoGeorgian.variable} ${cormorant.variable} ${notoSerifGeorgian.variable} bg-background`}
+      className={`${manrope.variable} ${notoGeorgian.variable} ${cormorant.variable} ${notoSerifGeorgian.variable} dark`}
     >
       <body className="font-sans antialiased">
         {children}
