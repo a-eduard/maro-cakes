@@ -4,7 +4,17 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    // Включаем поддержку супер-современных форматов (AVIF весит меньше WebP)
+    formats: ['image/avif', 'image/webp'],
+    // Разрешаем Next.js оптимизировать картинки, приходящие из базы Sanity
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+      },
+    ],
+    // Кэшируем оптимизированные картинки надолго (ускорит повторные загрузки)
+    minimumCacheTTL: 31536000,
   },
 }
 
