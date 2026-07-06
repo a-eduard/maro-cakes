@@ -2,10 +2,9 @@ import React, { useCallback } from 'react'
 import { useFormValue, set, unset } from 'sanity'
 import { Select } from '@sanity/ui'
 
-// 1. Кастомный выпадающий список для Бисквитов
+// 1. Кастомний випадаючий список для Бісквітів
 const BiscuitSelect = (props: any) => {
   const { value, onChange } = props
-  // Читаем массив бисквитов прямо из текущего документа
   const biscuits: any = useFormValue(['biscuits']) || []
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -15,18 +14,18 @@ const BiscuitSelect = (props: any) => {
 
   return (
     <Select value={value || ''} onChange={handleChange}>
-      <option value="">--- Выберите бисквит ---</option>
-      {biscuits.map((b: any) => (
-        b.name ? <option key={b.name} value={b.name}>{b.name}</option> : null
-      ))}
+      <option value="">--- Оберіть бісквіт ---</option>
+      {biscuits.map((b: any) => {
+        const label = b.name?.uk || ''
+        return label ? <option key={label} value={label}>{label}</option> : null
+      })}
     </Select>
   )
 }
 
-// 2. Кастомный выпадающий список для Начинок
+// 2. Кастомний випадаючий список для Начинок
 const FillingSelect = (props: any) => {
   const { value, onChange } = props
-  // Читаем массив начинок прямо из текущего документа
   const fillings: any = useFormValue(['fillings']) || []
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,10 +35,11 @@ const FillingSelect = (props: any) => {
 
   return (
     <Select value={value || ''} onChange={handleChange}>
-      <option value="">--- Выберите начинку ---</option>
-      {fillings.map((f: any) => (
-        f.name ? <option key={f.name} value={f.name}>{f.name}</option> : null
-      ))}
+      <option value="">--- Оберіть начинку ---</option>
+      {fillings.map((f: any) => {
+        const label = f.name?.uk || ''
+        return label ? <option key={label} value={label}>{label}</option> : null
+      })}
     </Select>
   )
 }
@@ -48,25 +48,39 @@ const FillingSelect = (props: any) => {
 export default {
   name: 'cakeBuilder',
   type: 'document',
-  title: 'Настройки конструктора',
+  title: 'Налаштування конструктора',
   fields: [
     {
       name: 'basePrice',
       type: 'number',
-      title: 'Базовая цена за 1 кг (лари)',
-      description: 'Начальная цена торта за 1 кг без учета премиум-начинок и декора.',
+      title: 'Базова ціна за 1 кг (ларі)',
+      description: 'Початкова ціна торта за 1 кг без урахування преміум-начинок і декору.',
       initialValue: 80
     },
     {
       name: 'biscuits',
       type: 'array',
-      title: 'Виды бисквита',
+      title: 'Види бісквіта',
       of: [
         {
           type: 'object',
           fields: [
-            { name: 'name', type: 'string', title: 'Название (напр., Шоколадный)' },
-            { name: 'priceModifier', type: 'number', title: 'Надбавка к цене за 1 кг (если нет, ставьте 0)', initialValue: 0 }
+            { 
+              name: 'name', 
+              type: 'object', 
+              title: 'Назва (напр., Шоколадний)',
+              options: {
+                translate: true,
+                apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
+              },
+              fields: [
+                { name: 'uk', type: 'string', title: 'Українська' },
+                { name: 'ru', type: 'string', title: 'Русский' },
+                { name: 'en', type: 'string', title: 'English' },
+                { name: 'ka', type: 'string', title: 'ქართული' }
+              ]
+            },
+            { name: 'priceModifier', type: 'number', title: 'Надбавка до ціни за 1 кг (якщо немає, ставте 0)', initialValue: 0 }
           ]
         }
       ]
@@ -79,8 +93,22 @@ export default {
         {
           type: 'object',
           fields: [
-            { name: 'name', type: 'string', title: 'Название (напр., Сникерс)' },
-            { name: 'priceModifier', type: 'number', title: 'Надбавка к цене за 1 кг (если нет, ставьте 0)', initialValue: 0 }
+            { 
+              name: 'name', 
+              type: 'object', 
+              title: 'Назва (напр., Снікерс)',
+              options: {
+                translate: true,
+                apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
+              },
+              fields: [
+                { name: 'uk', type: 'string', title: 'Українська' },
+                { name: 'ru', type: 'string', title: 'Русский' },
+                { name: 'en', type: 'string', title: 'English' },
+                { name: 'ka', type: 'string', title: 'ქართული' }
+              ]
+            },
+            { name: 'priceModifier', type: 'number', title: 'Надбавка до ціни за 1 кг (якщо немає, ставте 0)', initialValue: 0 }
           ]
         }
       ]
@@ -88,14 +116,28 @@ export default {
     {
       name: 'decorations',
       type: 'array',
-      title: 'Декор (фиксированная цена)',
-      description: 'Цена прибавляется к итогу независимо от веса',
+      title: 'Декор (фіксована ціна)',
+      description: 'Ціна додається до підсумку незалежно від ваги',
       of: [
         {
           type: 'object',
           fields: [
-            { name: 'name', type: 'string', title: 'Название (напр., Свежие ягоды)' },
-            { name: 'price', type: 'number', title: 'Фиксированная цена', initialValue: 20 }
+            { 
+              name: 'name', 
+              type: 'object', 
+              title: 'Назва (напр., Свіжі ягоди)',
+              options: {
+                translate: true,
+                apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
+              },
+              fields: [
+                { name: 'uk', type: 'string', title: 'Українська' },
+                { name: 'ru', type: 'string', title: 'Русский' },
+                { name: 'en', type: 'string', title: 'English' },
+                { name: 'ka', type: 'string', title: 'ქართული' }
+              ]
+            },
+            { name: 'price', type: 'number', title: 'Фіксована ціна', initialValue: 20 }
           ]
         }
       ]
@@ -103,8 +145,8 @@ export default {
     {
       name: 'combinations',
       type: 'array',
-      title: 'Фотографии разрезов (Бисквит + Начинка)',
-      description: 'Загрузите фото для конкретных сочетаний. Если фото для выбранной пары нет, будет показано стандартное изображение.',
+      title: 'Фотографії розрізів (Бісквіт + Начинка)',
+      description: 'Завантажте фото для конкретних поєднань. Якщо фото для обраної пари немає, буде показано стандартне зображення.',
       of: [
         {
           type: 'object',
@@ -112,8 +154,7 @@ export default {
             {
               name: 'biscuitName',
               type: 'string',
-              title: 'Название бисквита',
-              // Подключаем наш кастомный компонент
+              title: 'Назва бісквіта',
               components: {
                 input: BiscuitSelect
               }
@@ -121,8 +162,7 @@ export default {
             {
               name: 'fillingName',
               type: 'string',
-              title: 'Название начинки',
-              // Подключаем наш кастомный компонент
+              title: 'Назва начинки',
               components: {
                 input: FillingSelect
               }
@@ -130,7 +170,7 @@ export default {
             {
               name: 'image',
               type: 'image',
-              title: 'Фотография разреза',
+              title: 'Фотографія розрізу',
               options: { hotspot: true }
             }
           ],

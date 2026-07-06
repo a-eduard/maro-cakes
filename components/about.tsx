@@ -3,11 +3,22 @@ import { Reveal } from '@/components/reveal'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 
-export async function About() {
-  const query = `*[_type == "about"][0]`
-  const about = await client.fetch(query)
+// ДОБАВЛЕН dict: any
+export async function About({ lang, dict }: { lang: string; dict?: any }) {
+  const query = `*[_type == "about"][0] {
+    "title": coalesce(title[$lang], title.ru),
+    "description": coalesce(description[$lang], description.ru),
+    image
+  }`
+  
+  const currentLang = lang || 'ru'
+  const about = await client.fetch(query, { lang: currentLang })
 
   if (!about) return null
+
+  // Текст берется из Sanity, если его нет — из словаря, если и его нет — резервный русский
+  const titleText = about.title || dict?.about_title || 'О кондитерской MarO'
+  const descText = about.description || dict?.about_desc || ''
 
   return (
     <section id="about" className="bg-accent/5 px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
@@ -17,7 +28,7 @@ export async function About() {
             <div className="relative aspect-square overflow-hidden rounded-[1.5rem]">
               <Image
                 src={about.image ? urlFor(about.image).url() : '/placeholder.svg'}
-                alt={about.title}
+                alt={titleText}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
@@ -27,13 +38,13 @@ export async function About() {
           
           <Reveal delay={0.2} className="flex flex-col gap-4 sm:gap-6">
             <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-              О нас
+              {dict?.about_tag || 'О нас'}
             </p>
             <h2 className="font-serif text-3xl font-light leading-tight text-foreground sm:text-4xl md:text-5xl">
-              {about.title}
+              {titleText}
             </h2>
             <p className="whitespace-pre-line leading-relaxed text-muted-foreground">
-              {about.description}
+              {descText}
             </p>
           </Reveal>
         </div>

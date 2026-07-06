@@ -1,0 +1,93 @@
+{
+  "header": {
+    "gallery": "Gallery",
+    "about": "About",
+    "prices": "Prices",
+    "education": "Education",
+    "reviews": "Reviews",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "contacts": "Contacts",
+    "order": "Order Now",
+    "checkout": "Checkout"
+  },
+  "ui": {
+    "gallery_subtitle": "Boutique Pastry Shop · Batumi",
+    "gallery_title": "Signature Cakes & Desserts in Batumi",
+    "gallery_desc": "Natural ingredients. Custom designs. Signature fillings.",
+    "gallery_btn": "View full gallery",
+    "about_tag": "About us",
+    "about_title": "About MarO Pastry",
+    "about_desc": "MarO is not just a pastry shop. It's a place where art is born.",
+    "bestsellers_overtitle": "Custom Cakes",
+    "bestsellers_title": "Our Guests' Favorite Cakes",
+    "bestsellers_empty": "The showcase is currently empty.",
+    "bestsellers_btn": "View all cakes",
+    "education_tag": "EDUCATION",
+    "education_title": "Pastry Art Education",
+    "education_desc": "Take a course with us and learn how to create the best desserts.",
+    "reviews_overtitle": "Reviews",
+    "reviews_title": "What our guests say",
+    "reviews_btn": "Read all reviews",
+    "prices_subtitle": "Every cake is custom-made for your occasion. The final cost depends on the weight and design complexity. Price per kg.",
+    "builder_title": "Didn't find what you were looking for?",
+    "builder_subtitle": "Build your perfect cake in our custom builder",
+    "footer_subtitle": "Contacts",
+    "footer_title": "Tell us about your dream cake",
+    "address": "Batumi, Georgia\n12 Primorskaya St",
+    "workingHours": "Daily\n10:00 — 20:00",
+    "faq": "Frequently Asked Questions",
+    "privacy": "Privacy Policy",
+    "created_by": "Created by IT studio",
+    "builder_step_1": "1. Cake weight (kg)",
+    "builder_step_2": "2. Sponge cake",
+    "builder_step_3": "3. Filling",
+    "builder_step_4": "4. Decoration",
+    "builder_step_5": "5. Wishes (inscription, allergies)",
+    "builder_kg": "kg",
+    "builder_included": "Included",
+    "builder_fixed": "fixed",
+    "builder_wishes_placeholder": "Example: 'Happy Birthday' inscription. No nuts.",
+    "builder_your_order": "Your order:",
+    "builder_weight": "Weight:",
+    "builder_biscuit": "Sponge:",
+    "builder_filling": "Filling:",
+    "builder_decoration": "Decoration:",
+    "builder_not_selected": "Not selected",
+    "builder_no_decoration": "No decoration",
+    "builder_total": "Total:",
+    "builder_date": "Date:",
+    "builder_address": "Delivery address (or pickup)",
+    "builder_phone": "Your phone (WhatsApp / Telegram)",
+    "builder_order_btn": "Order now",
+    "builder_success": "Order sent",
+    "builder_success_desc": "We will contact you shortly to confirm.",
+    "alert_biscuit_filling": "Please select a sponge cake and filling before ordering.",
+    "alert_date": "Please specify the date you need the cake for.",
+    "alert_phone": "Please enter your phone number or Telegram.",
+    "alert_error": "An error occurred while sending. Please try again later.",
+    "alert_network": "Network error. Please check your connection and try again.",
+    "cookies_text": "We use cookies to improve site performance and analytics. By continuing to use the site, you agree to our",
+"cookies_policy": "Privacy Policy",
+"cookies_accept": "Accept"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated",
+    "intro": "This Privacy Policy describes how the «MarO» pastry studio collects, uses, and protects your personal information when using our website.",
+    "blocks": [
+      {
+        "h": "1. What information we collect",
+        "p": "Since our site works as a showcase and does not process online payments, we collect a minimal amount of data: contact and technical data."
+      },
+      {
+        "h": "2. How we use your information",
+        "p": "To process your order and contact you for its confirmation and delivery. To improve the user experience."
+      },
+      {
+        "h": "3. Data transfer to third parties",
+        "p": "We do not sell or transfer your personal data to third parties. Data is transferred directly via the Telegram API exclusively for order processing."
+      }
+    ]
+  }
+}

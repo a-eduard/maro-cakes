@@ -10,9 +10,14 @@ interface Review {
   rating: number
 }
 
-export async function Reviews() {
-  const query = `*[_type == "review"] | order(_createdAt desc)[0...3]`
-  const reviews: Review[] = await client.fetch(query)
+export async function Reviews({ lang, dict }: { lang: string; dict?: any }) {
+  const query = `*[_type == "review"] | order(_createdAt desc)[0...3] {
+    _id,
+    "name": coalesce(name[$lang], name.ru),
+    "text": coalesce(text[$lang], text.ru),
+    rating
+  }`
+  const reviews: Review[] = await client.fetch(query, { lang: lang || 'ru' })
 
   if (!reviews || reviews.length === 0) return null
 
@@ -21,17 +26,17 @@ export async function Reviews() {
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-12 sm:mb-16 md:mb-24">
           <p className="mb-4 sm:mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground">
-            Отзывы
+            {dict?.reviews_overtitle || 'Отзывы'}
           </p>
           <h2 className="font-serif text-3xl font-light leading-tight text-foreground sm:text-4xl md:text-5xl">
-            Что говорят наши гости
+            {dict?.reviews_title || 'Что говорят наши гости'}
           </h2>
         </Reveal>
 
         <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review, i) => (
             <Reveal key={review._id} delay={(i % 3) * 0.1}>
-              <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 sm:p-8 md:p-10 transition-all duration-500 hover:-translate-y-1 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/30">
+              <div className="flex h-full flex-col justify-between rounded-[1.5rem] border border-border/60 bg-accent/5 p-6 sm:p-8 md:p-10 transition-all duration-500 hover:-translate-y-1 hover:border-primary hover:shadow-xl hover:shadow-primary/10">
                 <div>
                   <div className="mb-6 sm:mb-8 flex gap-1">
                     {[...Array(review.rating)].map((_, index) => (
@@ -56,10 +61,10 @@ export async function Reviews() {
 
         <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">
           <Link
-            href="/reviews"
+            href={`/${lang}/reviews`}
             className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm tracking-wide text-foreground transition-all hover:bg-foreground hover:text-background"
           >
-            Читать все отзывы
+            {dict?.reviews_btn || 'Читать все отзывы'}
           </Link>
         </Reveal>
       </div>

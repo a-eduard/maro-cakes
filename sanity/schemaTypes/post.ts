@@ -1,40 +1,73 @@
 export default {
-    name: 'post',
-    type: 'document',
-    title: 'Блог (Статьи)',
-    fields: [
-      {
-        name: 'title',
-        type: 'string',
-        title: 'Заголовок статьи'
+  name: 'post',
+  type: 'document',
+  title: 'Блог (Статті)',
+  fields: [
+    {
+      name: 'title',
+      type: 'object',
+      title: 'Заголовок статті',
+      options: {
+        translate: true,
+        apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
       },
-      {
-        name: 'slug',
-        type: 'slug',
-        title: 'Ссылка (URL)',
-        options: { source: 'title' }
-      },
-      {
-        name: 'publishedAt',
-        type: 'datetime',
-        title: 'Дата публикации'
-      },
-      {
-        name: 'image',
-        type: 'image',
-        title: 'Обложка статьи',
-        options: { hotspot: true }
-      },
-      {
-        name: 'excerpt',
-        type: 'text',
-        title: 'Краткое описание (Превью для главной)'
-      },
-      {
-        name: 'body',
-        type: 'array',
-        title: 'Текст статьи',
-        of: [{ type: 'block' }] // Этот тип позволяет писать форматированный текст (жирный, списки и т.д.)
+      fields: [
+        { name: 'uk', type: 'string', title: 'Українська' },
+        { name: 'ru', type: 'string', title: 'Русский' },
+        { name: 'en', type: 'string', title: 'English' },
+        { name: 'ka', type: 'string', title: 'ქართული' }
+      ]
+    },
+    {
+      name: 'slug',
+      type: 'slug',
+      title: 'Посилання (URL)',
+      options: { 
+        source: (doc: any) => doc.title?.uk || '', 
+        maxLength: 96 
       }
-    ]
-  }
+    },
+    {
+      name: 'publishedAt',
+      type: 'datetime',
+      title: 'Дата публікації'
+    },
+    {
+      name: 'image',
+      type: 'image',
+      title: 'Обкладинка статті',
+      options: { hotspot: true }
+    },
+    {
+      name: 'excerpt',
+      type: 'object',
+      title: 'Короткий опис (Прев\'ю для головної)',
+      options: {
+        translate: true,
+        apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
+      },
+      fields: [
+        { name: 'uk', type: 'text', title: 'Українська' },
+        { name: 'ru', type: 'text', title: 'Русский' },
+        { name: 'en', type: 'text', title: 'English' },
+        { name: 'ka', type: 'text', title: 'ქართული' }
+      ]
+    },
+    {
+      name: 'body',
+      type: 'object',
+      title: 'Текст статті',
+      options: {
+        translate: true,
+        apiKey: process.env.NEXT_PUBLIC_GOOGLE_TRANSLATE_API_KEY || ''
+      },
+      // Заменили array of blocks на обычный text, чтобы плагин работал
+      fields: [
+        { name: 'uk', type: 'text', title: 'Українська' },
+        { name: 'ru', type: 'text', title: 'Русский' },
+        { name: 'en', type: 'text', title: 'English' },
+        { name: 'ka', type: 'text', title: 'ქართული' }
+      ]
+    }
+  ]
+}

@@ -3,13 +3,19 @@ import Image from 'next/image'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
-import { CakeBuilder } from '@/components/cake-builder'
+import { CakeBuilder } from '@/components/cake-builder' // ВЕРНУЛИ ФИГУРНЫЕ СКОБКИ
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
+import { getDictionary } from '@/lib/dictionaries'
 
-export const metadata: Metadata = {
-  title: 'Цены на торты на заказ | MarO Батуми',
-  description: 'Каталог и цены на авторские торты, десерты и выпечку в кондитерской MarO. Закажите торт вашей мечты в Батуми.',
+// Динамические метаданные для SEO
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const dict = await getDictionary(lang as any)
+  return {
+    title: `${dict.header?.prices || 'Цены'} | MarO`,
+    description: 'Каталог и цены на авторские торты, десерты и выпечку в кондитерской MarO. Закажите торт вашей мечты в Батуми.',
+  }
 }
 
 interface Cake {
@@ -21,28 +27,74 @@ interface Cake {
   image: any
 }
 
-export default async function PricesPage() {
-  // Запрашиваем торты
-  const cakesQuery = `*[_type == "cake"] | order(_createdAt desc)`
-  const cakes: Cake[] = await client.fetch(cakesQuery)
+export default async function PricesPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  const dict = await getDictionary(lang as any)
 
-  // Запрашиваем настройки конструктора
-  const builderQuery = `*[_type == "cakeBuilder"][0]`
-  const builderData = await client.fetch(builderQuery)
+  // Запрашиваем торты, извлекая нужный язык
+  const cakesQuery = `*[_type == "cake"] | order(_createdAt desc) {
+    _id,
+    "title": coalesce(title[$lang], title.ru),
+    "description": coalesce(description[$lang], description.ru),
+    price,
+    oldPrice,
+    image
+  }`
+  const cakes: Cake[] = await client.fetch(cakesQuery, { lang })
+
+  // Запрашиваем настройки конструктора, распаковывая массивы с языками
+  const builderQuery = `*[_type == "cakeBuilder"][0] {
+    ...,
+    biscuits[] {
+      ...,
+      "name": coalesce(name[$lang], name.ru)
+    },
+    fillings[] {
+      ...,
+      "name": coalesce(name[$lang], name.ru)
+    },
+    decorations[] {
+      ...,
+      "name": coalesce(name[$lang], name.ru)
+    }
+  }`
+  const builderData = await client.fetch(builderQuery, { lang })
+
+  // Генерируем массив микроразметки Schema.org для товаров
+  const jsonLd = cakes.map((cake) => ({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: cake.title,
+    description: cake.description || 'Авторский торт на заказ',
+    image: cake.image ? urlFor(cake.image).url() : 'https://maro-cakes.vercel.app/placeholder.svg',
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'GEL',
+      price: cake.price,
+      availability: 'https://schema.org/InStock',
+      url: `https://maro-cakes.vercel.app/${lang}/prices` // Ссылка на каталог
+    }
+  }))
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
+      {/* Внедряем JSON-LD для каждого торта (поисковики это увидят, люди - нет) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      
+      <SiteHeader dict={dict.header} />
       
       <main className="flex-1 pt-32 pb-24 md:pt-48 md:pb-40">
         <section className="px-6 md:px-12">
           <div className="mx-auto max-w-7xl">
             <Reveal className="mb-16 text-center md:mb-24">
               <h1 className="font-serif text-5xl font-light leading-tight text-foreground md:text-6xl">
-                Наши десерты и цены
+                {dict.header?.prices || 'Наши десерты и цены'}
               </h1>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                Каждый торт готовится индивидуально под ваш повод. Итоговая стоимость зависит от веса и сложности декора. Цена указана за килограмм.
+                {dict.ui?.prices_subtitle || 'Каждый торт готовится индивидуально под ваш повод. Итоговая стоимость зависит от веса и сложности декора. Цена указана за килограмм.'}
               </p>
             </Reveal>
 
@@ -55,7 +107,7 @@ export default async function PricesPage() {
                       <div className="relative aspect-[4/5] overflow-hidden rounded-[1.5rem]">
                         <Image
                           src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
-                          alt={cake.title}
+                          alt={cake.title || 'Торт'}
                           fill
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -67,11 +119,11 @@ export default async function PricesPage() {
                             {cake.title}
                           </h3>
                           <div className="flex flex-col items-end whitespace-nowrap">
-                            {cake.oldPrice && (
+                            {cake.oldPrice ? (
                               <span className="text-xs text-muted-foreground line-through">
                                 {cake.oldPrice} ₾
                               </span>
-                            )}
+                            ) : null}
                             <span className="text-lg font-semibold text-foreground">
                               {cake.price} ₾
                             </span>
@@ -88,7 +140,7 @@ export default async function PricesPage() {
                           href="#contacts"
                           className="inline-flex h-10 w-full items-center justify-center rounded-full border border-brand-200 bg-brand-50/50 text-sm tracking-wide text-brand-950 transition-colors hover:bg-brand-400 hover:text-white"
                         >
-                          Заказать
+                          {dict.header?.order || 'Заказать'}
                         </a>
                       </div>
                     </article>
@@ -96,22 +148,22 @@ export default async function PricesPage() {
                 ))}
               </div>
             ) : (
-              <p className="mb-32 text-center text-muted-foreground">Меню обновляется.</p>
+              <p className="mb-32 text-center text-muted-foreground">{dict.ui?.bestsellers_empty || 'Меню обновляется.'}</p>
             )}
 
             {/* Блок Конструктора */}
             {builderData && (
               <Reveal>
-                <div className="mb-12 text-center">
+                <div className="mb-12 text-center" id="constructor">
                   <h2 className="font-serif text-4xl font-light text-foreground md:text-5xl">
-                    Не нашли то, что искали?
+                    {dict.ui?.builder_title || 'Не нашли то, что искали?'}
                   </h2>
                   <p className="mt-4 text-lg text-muted-foreground">
-                    Соберите свой идеальный торт в нашем конструкторе
+                    {dict.ui?.builder_subtitle || 'Соберите свой идеальный торт в нашем конструкторе'}
                   </p>
                 </div>
                 
-                <CakeBuilder data={builderData} />
+                <CakeBuilder data={builderData} dict={dict.ui} />
               </Reveal>
             )}
 
@@ -119,7 +171,7 @@ export default async function PricesPage() {
         </section>
       </main>
 
-      <SiteFooter />
+      <SiteFooter lang={lang} dict={dict.ui} />
     </div>
   )
 }

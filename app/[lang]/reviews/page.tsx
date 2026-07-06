@@ -4,11 +4,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
 import { client } from '@/sanity/lib/client'
 import { Star } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'Отзывы клиентов | MarO Батуми',
-  description: 'Что говорят наши гости об авторских тортах, десертах и мастер-классах в кондитерской MarO.',
-}
+import { getDictionary } from '@/lib/dictionaries'
 
 interface Review {
   _id: string
@@ -17,25 +13,40 @@ interface Review {
   rating: number
 }
 
-export default async function ReviewsPage() {
-  // Получаем ВСЕ отзывы
-  const query = `*[_type == "review"] | order(_createdAt desc)`
-  const reviews: Review[] = await client.fetch(query)
+// Динамические метаданные для SEO
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
+  const { lang } = await params
+  const dict = await getDictionary(lang as any)
+  return {
+    title: `${dict.ui?.reviews_overtitle || 'Отзывы'} | MarO`,
+    description: dict.ui?.reviews_title || 'Что говорят наши гости об авторских тортах, десертах и мастер-классах в кондитерской MarO.',
+  }
+}
+
+export default async function ReviewsPage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params
+  const dict = await getDictionary(lang as any)
+
+  // Получаем отзывы с правильным языком через coalesce
+  const query = `*[_type == "review"] | order(_createdAt desc) {
+    _id,
+    "name": coalesce(name[$lang], name.ru),
+    "text": coalesce(text[$lang], text.ru),
+    rating
+  }`
+  const reviews: Review[] = await client.fetch(query, { lang })
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
+      <SiteHeader dict={dict.header} />
       
       <main className="flex-1 pt-32 pb-24 md:pt-48 md:pb-40">
         <section className="px-6 md:px-12">
           <div className="mx-auto max-w-7xl">
             <Reveal className="mb-16 text-center md:mb-24">
               <h1 className="font-serif text-5xl font-light leading-tight text-foreground md:text-6xl">
-                Отзывы наших гостей
+                {dict.ui?.reviews_title || 'Отзывы наших гостей'}
               </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                Спасибо, что доверяете нам свои самые важные праздники и делитесь эмоциями.
-              </p>
             </Reveal>
 
             {reviews.length > 0 ? (
@@ -71,7 +82,7 @@ export default async function ReviewsPage() {
         </section>
       </main>
 
-      <SiteFooter />
+      <SiteFooter lang={lang} dict={dict.ui} />
     </div>
   )
 }
