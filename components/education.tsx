@@ -18,7 +18,7 @@ export async function Education({ isDetailedView = false, lang, dict }: Educatio
   }`
   
   const currentLang = lang || 'ru'
-  const edu = await client.fetch(query, { lang: currentLang })
+  const edu = await client.fetch(query, { lang: currentLang }, { next: { revalidate: 60 } })
 
   if (!edu) return null
 

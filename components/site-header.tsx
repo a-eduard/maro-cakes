@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useParams } from 'next/navigation'
+import { usePathname, useParams, useRouter } from 'next/navigation' // ДОБАВЛЕН useRouter
 import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
@@ -14,26 +14,25 @@ const locales = [
   { code: 'uk', label: 'UK', flag: '🇺🇦' },
 ]
 
-// Мы убрали lang из пропсов, шапка определит его сама
 export function SiteHeader({ dict }: { dict: any }) {
   const [scrolled, setScrolled] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   
   const pathname = usePathname()
   const params = useParams()
+  const router = useRouter() // ИНИЦИАЛИЗАЦИЯ РОУТЕРА
 
-  // 1. Идеально точное определение языка из URL (защита от неверного названия папки)
   const currentLang = (params?.lang || params?.locale || 'ru') as string
   const currentFlag = locales.find(l => l.code === currentLang)?.flag || '🇷🇺'
   const displayLang = currentLang === 'ka' ? 'GE' : currentLang.toUpperCase()
 
-  // 2. ЖЕСТКАЯ смена языка с полным сбросом кэша страницы
+  // ИСПРАВЛЕНА СМЕНА ЯЗЫКА: Плавный SPA-переход вместо жесткой перезагрузки
   const handleLanguageChange = (newLocale: string) => {
     if (!pathname) return
     const segments = pathname.split('/')
     segments[1] = newLocale
-    // window.location.href убивает кэш Next.js и заставляет сервер отдать новый язык
-    window.location.href = segments.join('/')
+    router.push(segments.join('/')) 
+    router.refresh() // Дает команду серверу обновить контент под новый язык без перезагрузки CSS/JS
   }
 
   const nav = [

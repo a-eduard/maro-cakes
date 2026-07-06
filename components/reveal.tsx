@@ -15,7 +15,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
-  y = 28,
+  y = 10, // УМЕНЬШИЛИ СДВИГ С 28 ДО 10 ДЛЯ УСТРАНЕНИЯ CLS
   as = 'div',
 }: RevealProps) {
   const MotionTag = motion[as]

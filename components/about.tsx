@@ -12,7 +12,7 @@ export async function About({ lang, dict }: { lang: string; dict?: any }) {
   }`
   
   const currentLang = lang || 'ru'
-  const about = await client.fetch(query, { lang: currentLang })
+  const about = await client.fetch(query, { lang: currentLang }, { next: { revalidate: 60 } })
 
   if (!about) return null
 

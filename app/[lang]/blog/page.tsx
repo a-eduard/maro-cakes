@@ -39,7 +39,7 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
     slug,
     publishedAt
   }`
-  const posts: BlogPost[] = await client.fetch(query, { lang })
+  const posts: BlogPost[] = await client.fetch(query, { lang }, { next: { revalidate: 60 } })
 
   // Функция для правильного формата даты по языку
   const getLocaleForDate = (locale: string) => {

@@ -14,7 +14,7 @@ export default async function FAQPage({ params }: { params: Promise<{ lang: stri
     "question": coalesce(question[$lang], question.ru),
     "answer": coalesce(answer[$lang], answer.ru)
   }`
-  const faqs = await client.fetch(query, { lang })
+  const faqs = await client.fetch(query, { lang }, { next: { revalidate: 60 } })
 
   return (
     <div className="relative flex min-h-screen flex-col">

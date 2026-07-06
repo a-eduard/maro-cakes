@@ -17,7 +17,7 @@ export async function Reviews({ lang, dict }: { lang: string; dict?: any }) {
     "text": coalesce(text[$lang], text.ru),
     rating
   }`
-  const reviews: Review[] = await client.fetch(query, { lang: lang || 'ru' })
+  const reviews: Review[] = await client.fetch(query, { lang: lang || 'ru' }, { next: { revalidate: 60 } })
 
   if (!reviews || reviews.length === 0) return null
 

@@ -33,7 +33,7 @@ export default async function GalleryPage({ params }: { params: Promise<{ lang: 
     "title": coalesce(title[$lang], title.ru),
     image
   }`
-  const images: GalleryImage[] = await client.fetch(query, { lang })
+  const images: GalleryImage[] = await client.fetch(query, { lang }, { next: { revalidate: 60 } })
 
   return (
     <div className="relative flex min-h-screen flex-col">

@@ -34,7 +34,7 @@ export default async function ReviewsPage({ params }: { params: Promise<{ lang: 
     "text": coalesce(text[$lang], text.ru),
     rating
   }`
-  const reviews: Review[] = await client.fetch(query, { lang })
+  const reviews: Review[] = await client.fetch(query, { lang }, { next: { revalidate: 60 } })
 
   return (
     <div className="relative flex min-h-screen flex-col">

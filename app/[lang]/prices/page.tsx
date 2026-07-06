@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
-import { CakeBuilder } from '@/components/cake-builder' // ВЕРНУЛИ ФИГУРНЫЕ СКОБКИ
+import { CakeBuilder } from '@/components/cake-builder'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getDictionary } from '@/lib/dictionaries'
@@ -31,7 +31,7 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
   const { lang } = await params
   const dict = await getDictionary(lang as any)
 
-  // Запрашиваем торты, извлекая нужный язык
+  // Запрашиваем торты
   const cakesQuery = `*[_type == "cake"] | order(_createdAt desc) {
     _id,
     "title": coalesce(title[$lang], title.ru),
@@ -40,25 +40,27 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
     oldPrice,
     image
   }`
-  const cakes: Cake[] = await client.fetch(cakesQuery, { lang })
+  const cakes: Cake[] = await client.fetch(cakesQuery, { lang }, { next: { revalidate: 60 } })
 
-  // Запрашиваем настройки конструктора, распаковывая массивы с языками
+  // Запрашиваем настройки конструктора (ДОБАВЛЕН matchName ДЛЯ ПОИСКА КАРТИНОК)
   const builderQuery = `*[_type == "cakeBuilder"][0] {
     ...,
     biscuits[] {
       ...,
-      "name": coalesce(name[$lang], name.ru)
+      "name": coalesce(name[$lang], name.ru),
+      "matchName": name.uk
     },
     fillings[] {
       ...,
-      "name": coalesce(name[$lang], name.ru)
+      "name": coalesce(name[$lang], name.ru),
+      "matchName": name.uk
     },
     decorations[] {
       ...,
       "name": coalesce(name[$lang], name.ru)
     }
   }`
-  const builderData = await client.fetch(builderQuery, { lang })
+  const builderData = await client.fetch(builderQuery, { lang }, { next: { revalidate: 60 } })
 
   // Генерируем массив микроразметки Schema.org для товаров
   const jsonLd = cakes.map((cake) => ({
@@ -72,13 +74,12 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
       priceCurrency: 'GEL',
       price: cake.price,
       availability: 'https://schema.org/InStock',
-      url: `https://maro-cakes.vercel.app/${lang}/prices` // Ссылка на каталог
+      url: `https://maro-cakes.vercel.app/${lang}/prices`
     }
   }))
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      {/* Внедряем JSON-LD для каждого торта (поисковики это увидят, люди - нет) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -98,7 +99,6 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
               </p>
             </Reveal>
 
-            {/* Каталог готовых тортов */}
             {cakes.length > 0 ? (
               <div className="mb-32 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {cakes.map((cake, i) => (
@@ -151,7 +151,6 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
               <p className="mb-32 text-center text-muted-foreground">{dict.ui?.bestsellers_empty || 'Меню обновляется.'}</p>
             )}
 
-            {/* Блок Конструктора */}
             {builderData && (
               <Reveal>
                 <div className="mb-12 text-center" id="constructor">

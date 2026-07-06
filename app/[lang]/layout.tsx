@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
-import { CookieBanner } from '@/components/cookie-banner' // Именованный импорт
+import { CookieBanner } from '@/components/cookie-banner'
+import Script from 'next/script' // 1. ДОБАВЛЕН ИМПОРТ
 
 export async function generateMetadata({
   params,
@@ -53,8 +54,11 @@ export default async function RootLayout({
   return (
     <html lang={lang} className="scroll-smooth">
       <head>
-        <script
+        {/* 2. ИСПОЛЬЗУЕМ SCRIPT ОТ NEXT.JS */}
+        <Script
+          id="local-business-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>

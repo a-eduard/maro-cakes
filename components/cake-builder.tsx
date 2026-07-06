@@ -8,6 +8,7 @@ import { urlFor } from '@/sanity/lib/image'
 
 interface BuilderOption {
   name: string
+  matchName?: string // Добавлен оригинальный ключ
   priceModifier?: number
   price?: number
 }
@@ -78,8 +79,8 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
       `📅 *Дата:* ${deliveryDate}\n` +
       `📍 *Адрес:* ${deliveryAddress || 'Самовывоз / Не указан'}\n` +
       `⚖️ *Вес:* ${weight} кг\n` +
-      `🍰 *Бисквит:* ${biscuit.name}\n` +
-      `🍓 *Начинка:* ${filling.name}\n` +
+      `🍰 *Бисквит:* ${biscuit?.name}\n` +
+      `🍓 *Начинка:* ${filling?.name}\n` +
       `✨ *Декор:* ${decoration?.name || 'Без декора'}\n` +
       `📝 *Пожелания:* ${wishes || 'Нет'}\n\n` +
       `💰 *Примерная стоимость:* ${total} ₾`
@@ -103,10 +104,11 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
     }
   }
 
+  // ИСПРАВЛЕНИЕ: Ищем совпадение по скрытому оригинальному ключу matchName
   const currentCombo = data.combinations?.find(
     (combo) => 
-      combo.biscuitName === biscuit?.name && 
-      combo.fillingName === filling?.name
+      combo.biscuitName === biscuit?.matchName && 
+      combo.fillingName === filling?.matchName
   )
 
   const fallbackImage = data.combinations?.[0]?.image ? urlFor(data.combinations[0].image).url() : '/placeholder.svg'

@@ -11,20 +11,27 @@ interface Cake {
   price: number
   oldPrice?: number
   image: any
+  lqip?: string // Добавили поле для размытого превью
 }
 
 export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) {
+  // Добавили "lqip": image.asset->metadata.lqip в запрос
   const query = `*[_type == "cake" && isBestseller == true] | order(_createdAt desc)[0...8] {
     _id,
     "title": coalesce(title[$lang], title.ru),
     "description": coalesce(description[$lang], description.ru),
     price,
     oldPrice,
-    image
+    image,
+    "lqip": image.asset->metadata.lqip
   }`
 
   const currentLang = lang || 'ru'
-  const cakes: Cake[] = await client.fetch(query, { lang: currentLang })
+  const cakes: Cake[] = await client.fetch(
+    query, 
+    { lang: currentLang }, 
+    { next: { revalidate: 60 } } 
+  )
 
   return (
     <section id="bestsellers" className="px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
@@ -54,7 +61,10 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
                       src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
                       alt={safeTitle}
                       fill
-                      sizes="(max-width: 640px) 100vw, 25vw"
+                      priority={i < 2} // Высший приоритет только для первых 2 фото
+                      placeholder={cake.lqip ? "blur" : "empty"} // Включаем блюр
+                      blurDataURL={cake.lqip} // Передаем данные блюра
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" // Оптимизировали sizes
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   </div>
@@ -75,7 +85,6 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
           <p className="text-muted-foreground">{dict?.bestsellers_empty || 'Витрина пока пуста.'}</p>
         )}
 
-        {/* Теперь кнопка корректно перенаправляет на страницу /prices, где лежит каталог и конструктор */}
         <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">
           <Link
             href={`/${currentLang}/prices`} 

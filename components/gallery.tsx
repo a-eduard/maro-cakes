@@ -8,15 +8,18 @@ interface GalleryImage {
   _id: string
   title: string
   image: any
+  lqip?: string // Добавили поле для размытого превью
 }
 
 export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
+  // Добавили "lqip": image.asset->metadata.lqip в запрос
   const query = `*[_type == "gallery"] | order(order asc)[0...6] {
     _id,
     "title": coalesce(title[$lang], title.ru),
-    image
+    image,
+    "lqip": image.asset->metadata.lqip 
   }`
-  const images: GalleryImage[] = await client.fetch(query, { lang: lang || 'ru' })
+  const images: GalleryImage[] = await client.fetch(query, { lang: lang || 'ru' }, { next: { revalidate: 60 } })
 
   if (!images || images.length === 0) return null
 
@@ -45,6 +48,9 @@ export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
                     src={img.image ? urlFor(img.image).url() : '/placeholder.svg'}
                     alt={img.title || 'Фото из галереи'}
                     fill
+                    priority={i < 2} // Высший приоритет только для первых 2 фото
+                    placeholder={img.lqip ? "blur" : "empty"} // Включаем блюр
+                    blurDataURL={img.lqip} // Передаем данные блюра
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   />

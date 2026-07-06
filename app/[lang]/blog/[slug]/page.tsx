@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
 import { SiteHeader } from '@/components/site-header'
@@ -7,6 +8,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
+import { getDictionary } from '@/lib/dictionaries'
 
 // Типизация для статьи
 interface BlogPost {
@@ -18,9 +20,9 @@ interface BlogPost {
   excerpt?: string
 }
 
-// В новых версиях Next.js params является Promise
+// Добавляем lang в параметры, так как мы находимся в папке [lang]
 type Props = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ lang: string; slug: string }>
 }
 
 // 1. Динамическая генерация SEO-метатегов для Google
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const slug = resolvedParams.slug
 
   const query = `*[_type == "post" && slug.current == $slug][0]`
-  const post = await client.fetch(query, { slug })
+  const post = await client.fetch(query, { slug }, { next: { revalidate: 60 } })
 
   if (!post) {
     return { title: 'Статья не найдена | MarO Батуми' }
@@ -44,7 +46,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // 2. Рендер страницы
 export default async function BlogPostPage({ params }: Props) {
   const resolvedParams = await params
-  const slug = resolvedParams.slug
+  const { lang, slug } = resolvedParams
+
+  // Подтягиваем нужный словарь для текущего языка
+  const dict = await getDictionary(lang as any)
 
   // Получаем конкретную статью по слагу (slug) из URL
   const query = `*[_type == "post" && slug.current == $slug][0] {
@@ -56,7 +61,7 @@ export default async function BlogPostPage({ params }: Props) {
     excerpt
   }`
   
-  const post: BlogPost = await client.fetch(query, { slug })
+  const post: BlogPost = await client.fetch(query, { slug }, { next: { revalidate: 60 } })
 
   // Если статья не найдена в базе, Next.js автоматически отдаст красивую страницу 404
   if (!post) {
@@ -66,9 +71,20 @@ export default async function BlogPostPage({ params }: Props) {
   // Sanity может сохранять обложку как mainImage или image в зависимости от настроек шаблона
   const postCover = post.mainImage || post.image
 
+  // Простая функция для форматирования даты в зависимости от языка
+  const getLocaleForDate = (locale: string) => {
+    switch (locale) {
+      case 'en': return 'en-US'
+      case 'uk': return 'uk-UA'
+      case 'ka': return 'ka-GE'
+      default: return 'ru-RU'
+    }
+  }
+
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader />
+      {/* Передаем dict в шапку */}
+      <SiteHeader dict={dict.header} />
 
       <main className="flex-1 pt-32 pb-24 md:pt-48 md:pb-40">
         <article className="px-6 md:px-12">
@@ -77,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
             {/* Шапка статьи */}
             <Reveal className="mb-12 text-center md:mb-16">
               <time className="mb-6 block text-sm tracking-widest text-muted-foreground uppercase">
-                {new Date(post.publishedAt).toLocaleDateString('ru-RU', {
+                {new Date(post.publishedAt).toLocaleDateString(getLocaleForDate(lang), {
                   day: 'numeric',
                   month: 'long',
                   year: 'numeric'
@@ -115,19 +131,20 @@ export default async function BlogPostPage({ params }: Props) {
 
             {/* Кнопка "Назад в блог" */}
             <Reveal delay={0.4} className="mt-20 border-t border-border/60 pt-10 text-center">
-              <a
-                href="/blog"
+              <Link
+                href={`/${lang}/blog`}
                 className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-brand-400 hover:text-brand-500"
               >
-                Вернуться к списку статей
-              </a>
+                {dict.ui?.bestsellers_btn || 'Вернуться к списку статей'}
+              </Link>
             </Reveal>
 
           </div>
         </article>
       </main>
 
-      <SiteFooter />
+      {/* Передаем lang и dict в подвал */}
+      <SiteFooter lang={lang} dict={dict.ui} />
     </div>
   )
 }
