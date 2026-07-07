@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
 import { CookieBanner } from '@/components/cookie-banner'
-import Script from 'next/script' // 1. ДОБАВЛЕН ИМПОРТ
 
 export async function generateMetadata({
   params,
@@ -32,7 +31,7 @@ export default async function RootLayout({
     "@context": "https://schema.org",
     "@type": "Bakery",
     "name": "MarO Cakes & Desserts",
-    "image": "https://maro-cakes.vercel.app/logo.png", // Убедись, что логотип есть в папке public
+    "image": "https://maro-cakes.vercel.app/logo.png",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "ул. Приморская, 12",
@@ -52,13 +51,10 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={lang} className="scroll-smooth">
+    <html lang={lang} className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
-        {/* 2. ИСПОЛЬЗУЕМ SCRIPT ОТ NEXT.JS */}
-        <Script
-          id="local-business-schema"
+        <script
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>

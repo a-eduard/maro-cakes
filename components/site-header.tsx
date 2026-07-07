@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useParams, useRouter } from 'next/navigation' // ДОБАВЛЕН useRouter
+import { usePathname, useParams, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
@@ -20,19 +20,18 @@ export function SiteHeader({ dict }: { dict: any }) {
   
   const pathname = usePathname()
   const params = useParams()
-  const router = useRouter() // ИНИЦИАЛИЗАЦИЯ РОУТЕРА
+  const router = useRouter()
 
   const currentLang = (params?.lang || params?.locale || 'ru') as string
   const currentFlag = locales.find(l => l.code === currentLang)?.flag || '🇷🇺'
   const displayLang = currentLang === 'ka' ? 'GE' : currentLang.toUpperCase()
 
-  // ИСПРАВЛЕНА СМЕНА ЯЗЫКА: Плавный SPA-переход вместо жесткой перезагрузки
   const handleLanguageChange = (newLocale: string) => {
     if (!pathname) return
     const segments = pathname.split('/')
     segments[1] = newLocale
     router.push(segments.join('/')) 
-    router.refresh() // Дает команду серверу обновить контент под новый язык без перезагрузки CSS/JS
+    router.refresh()
   }
 
   const nav = [
@@ -61,7 +60,7 @@ export function SiteHeader({ dict }: { dict: any }) {
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-12 md:py-6">
           <Link href={`/${currentLang}`} className="z-[1010] flex items-center" onClick={() => setIsOpen(false)}>
-            <Image src="/logo.png" alt="MarO Logo" width={120} height={50} priority className="object-contain md:h-[60px] md:w-[140px]" />
+            <Image src="/logo.png" alt="MarO Logo" width={120} height={50} priority className="w-auto h-auto object-contain md:h-[60px] md:w-[140px]" />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">

@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 const locales = ['ka', 'ru', 'en', 'uk']
 const defaultLocale = 'ka' // Грузинский теперь базовый язык
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   // Пропускаем системные пути, изображения, API и админку Sanity
