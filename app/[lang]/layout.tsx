@@ -1,7 +1,23 @@
 import type { Metadata } from 'next'
+import { Noto_Serif_Georgian, Noto_Sans_Georgian } from 'next/font/google'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
 import { CookieBanner } from '@/components/cookie-banner'
+
+// Настройка шрифта с засечками (для заголовков)
+// Убрали 'cyrillic', так как TypeScript строго требует только доступные для этого шрифта сабсеты
+const notoSerif = Noto_Serif_Georgian({
+  subsets: ['latin', 'georgian'],
+  variable: '--font-serif',
+  display: 'swap',
+})
+
+// Настройка рубленого шрифта (для основного текста)
+const notoSans = Noto_Sans_Georgian({
+  subsets: ['latin', 'georgian'],
+  variable: '--font-sans',
+  display: 'swap',
+})
 
 export async function generateMetadata({
   params,
@@ -51,14 +67,15 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={lang} className="scroll-smooth" data-scroll-behavior="smooth">
+    <html lang={lang} className={`${notoSerif.variable} ${notoSans.variable} scroll-smooth`} data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>
-      <body className="antialiased">
+      {/* Применяем основной шрифт к body */}
+      <body className="font-sans antialiased bg-background text-foreground">
         {children}
         <CookieBanner lang={lang} dict={dict.ui} />
       </body>

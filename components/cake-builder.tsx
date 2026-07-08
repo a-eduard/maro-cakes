@@ -8,7 +8,7 @@ import { urlFor } from '@/sanity/lib/image'
 
 interface BuilderOption {
   name: string
-  matchName?: string // Добавлен оригинальный ключ
+  matchName?: string 
   priceModifier?: number
   price?: number
 }
@@ -104,7 +104,6 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
     }
   }
 
-  // ИСПРАВЛЕНИЕ: Ищем совпадение по скрытому оригинальному ключу matchName
   const currentCombo = data.combinations?.find(
     (combo) => 
       combo.biscuitName === biscuit?.matchName && 
@@ -114,23 +113,36 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
   const fallbackImage = data.combinations?.[0]?.image ? urlFor(data.combinations[0].image).url() : '/placeholder.svg'
   const displayImageUrl = currentCombo?.image ? urlFor(currentCombo.image).url() : fallbackImage
 
+  // СТАЛО: Более компактные кнопки (меньше padding, текст плотнее)
+  const optionButtonClass = (isActive: boolean) => 
+    `rounded-xl border px-3 py-2 text-left text-sm transition-all duration-300 active:scale-95 flex flex-col justify-center ${
+      isActive
+        ? 'border-[#D4B76A] bg-[#D4B76A]/10 text-[#D4B76A] shadow-sm scale-[1.02]'
+        : 'border-white/10 bg-zinc-900/50 text-zinc-400 hover:border-white/30 hover:text-white hover:scale-[1.02]'
+    }`
+
+  // СТАЛО: Уменьшенная высота инпутов (py-3 вместо py-4)
+  const inputClass = "w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-white outline-none transition-all placeholder:text-zinc-600 focus:border-[#D4B76A] focus:bg-zinc-900"
+
   return (
-    <div className="rounded-[1.5rem] border border-border/60 bg-accent/5 p-4 sm:rounded-[2rem] sm:p-8 md:p-12 text-left">
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
+    // СТАЛО: Уменьшили внутренние отступы всего блока (p-6 / p-8)
+    <div className="mx-auto max-w-5xl rounded-[1.5rem] sm:rounded-[2rem] bg-zinc-950 p-5 sm:p-6 md:p-8 text-left shadow-2xl">
+      {/* СТАЛО: Уменьшили gap между левой и правой колонками */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         
         {/* Левая колонка */}
-        <div className="flex flex-col gap-8 sm:gap-10">
+        <div className="flex flex-col gap-6">
           <div>
-            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">{dict?.builder_step_1 || '1. Вес торта (кг)'}</h3>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
+            <h3 className="mb-3 font-serif text-lg text-white">{dict?.builder_step_1 || '1. Вес торта (кг)'}</h3>
+            <div className="flex flex-wrap gap-2">
               {[1, 1.5, 2, 2.5, 3, 4, 5].map((w) => (
                 <button
                   key={w}
                   onClick={() => setWeight(w)}
-                  className={`rounded-full px-4 py-2 text-sm sm:px-6 transition-all ${
+                  className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-300 active:scale-95 ${
                     weight === w
-                      ? 'bg-primary text-primary-foreground shadow-md'
-                      : 'border border-border bg-transparent text-muted-foreground hover:border-primary hover:text-primary'
+                      ? 'bg-[#D4B76A] text-zinc-950 scale-105 shadow-sm shadow-[#D4B76A]/20'
+                      : 'bg-zinc-900/50 text-zinc-400 border border-white/10 hover:border-white/30 hover:text-white hover:scale-105'
                   }`}
                 >
                   {w} {dict?.builder_kg || 'кг'}
@@ -140,23 +152,19 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">{dict?.builder_step_2 || '2. Бисквит'}</h3>
-            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
+            <h3 className="mb-3 font-serif text-lg text-white">{dict?.builder_step_2 || '2. Бисквит'}</h3>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {data.biscuits?.map((item, i) => (
                 <button
                   key={i}
                   onClick={() => setBiscuit(item)}
-                  className={`rounded-xl border p-4 text-left text-sm transition-all ${
-                    biscuit?.name === item.name
-                      ? 'border-primary bg-primary/10 text-primary shadow-sm'
-                      : 'border-border/60 text-muted-foreground hover:border-primary/50'
-                  }`}
+                  className={optionButtonClass(biscuit?.name === item.name)}
                 >
-                  <span className="block font-medium">{item.name}</span>
+                  <span className={`block font-semibold mb-0.5 text-xs sm:text-sm ${biscuit?.name === item.name ? 'text-[#D4B76A]' : 'text-white'}`}>{item.name}</span>
                   {item.priceModifier ? (
-                    <span className="text-xs opacity-70">+{item.priceModifier} ₾/{dict?.builder_kg || 'кг'}</span>
+                    <span className="text-[10px] sm:text-xs opacity-70">+{item.priceModifier} ₾/{dict?.builder_kg || 'кг'}</span>
                   ) : (
-                    <span className="text-xs opacity-70">{dict?.builder_included || 'Входит в цену'}</span>
+                    <span className="text-[10px] sm:text-xs opacity-70">{dict?.builder_included || 'Входит в цену'}</span>
                   )}
                 </button>
               ))}
@@ -164,23 +172,19 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">{dict?.builder_step_3 || '3. Начинка'}</h3>
-            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
+            <h3 className="mb-3 font-serif text-lg text-white">{dict?.builder_step_3 || '3. Начинка'}</h3>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {data.fillings?.map((item, i) => (
                 <button
                   key={i}
                   onClick={() => setFilling(item)}
-                  className={`rounded-xl border p-4 text-left text-sm transition-all ${
-                    filling?.name === item.name
-                      ? 'border-primary bg-primary/10 text-primary shadow-sm'
-                      : 'border-border/60 text-muted-foreground hover:border-primary/50'
-                  }`}
+                  className={optionButtonClass(filling?.name === item.name)}
                 >
-                  <span className="block font-medium">{item.name}</span>
+                  <span className={`block font-semibold mb-0.5 text-xs sm:text-sm ${filling?.name === item.name ? 'text-[#D4B76A]' : 'text-white'}`}>{item.name}</span>
                   {item.priceModifier ? (
-                    <span className="text-xs opacity-70">+{item.priceModifier} ₾/{dict?.builder_kg || 'кг'}</span>
+                    <span className="text-[10px] sm:text-xs opacity-70">+{item.priceModifier} ₾/{dict?.builder_kg || 'кг'}</span>
                   ) : (
-                    <span className="text-xs opacity-70">{dict?.builder_included || 'Входит в цену'}</span>
+                    <span className="text-[10px] sm:text-xs opacity-70">{dict?.builder_included || 'Входит в цену'}</span>
                   )}
                 </button>
               ))}
@@ -188,48 +192,46 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">{dict?.builder_step_4 || '4. Декор'}</h3>
-            <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:grid-cols-3">
+            <h3 className="mb-3 font-serif text-lg text-white">{dict?.builder_step_4 || '4. Декор'}</h3>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {data.decorations?.map((item, i) => (
                 <button
                   key={i}
                   onClick={() => setDecoration(item)}
-                  className={`rounded-xl border p-4 text-left text-sm transition-all ${
-                    decoration?.name === item.name
-                      ? 'border-primary bg-primary/10 text-primary shadow-sm'
-                      : 'border-border/60 text-muted-foreground hover:border-primary/50'
-                  }`}
+                  className={optionButtonClass(decoration?.name === item.name)}
                 >
-                  <span className="block font-medium">{item.name}</span>
-                  <span className="text-xs opacity-70">+{item.price} ₾ ({dict?.builder_fixed || 'фикс.'})</span>
+                  <span className={`block font-semibold mb-0.5 text-xs sm:text-sm ${decoration?.name === item.name ? 'text-[#D4B76A]' : 'text-white'}`}>{item.name}</span>
+                  <span className="text-[10px] sm:text-xs opacity-70">+{item.price} ₾ ({dict?.builder_fixed || 'фикс.'})</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <h3 className="mb-4 font-serif text-xl text-foreground sm:text-2xl">{dict?.builder_step_5 || '5. Пожелания (надпись, аллергия)'}</h3>
+            <h3 className="mb-3 font-serif text-lg text-white">{dict?.builder_step_5 || '5. Пожелания'}</h3>
+            {/* СТАЛО: 2 строки вместо 3 для экономии высоты */}
             <textarea
-              rows={3}
+              rows={2}
               value={wishes}
               onChange={(e) => setWishes(e.target.value)}
-              placeholder={dict?.builder_wishes_placeholder || "Например: Надпись 'С Днем Рождения!'. Без орехов."}
-              className="w-full resize-none rounded-xl border border-border/60 bg-transparent p-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
+              placeholder={dict?.builder_wishes_placeholder || "Например: Без орехов."}
+              className={`${inputClass} resize-none`}
             />
           </div>
         </div>
 
         {/* Правая колонка */}
         <div className="flex h-full flex-col">
-          <div className="sticky top-24 flex flex-col items-center rounded-2xl bg-card p-6 sm:p-8 shadow-sm">
-            <div className="relative mb-6 sm:mb-8 aspect-square w-full max-w-[200px] sm:max-w-[280px] overflow-hidden rounded-full border-4 border-primary/15 bg-accent/10">
+          <div className="sticky top-24 flex flex-col items-center rounded-3xl bg-zinc-900/40 p-6 border border-white/5">
+            {/* СТАЛО: Существенно уменьшен размер фото (max-w-[160px]) и нижний отступ */}
+            <div className="relative mb-6 aspect-square w-full max-w-[140px] sm:max-w-[180px] overflow-hidden rounded-full shadow-xl">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={displayImageUrl}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
                   className="absolute inset-0"
                 >
                   <Image
@@ -242,33 +244,34 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
               </AnimatePresence>
             </div>
             
-            <div className="w-full border-t border-dashed border-border/60 pt-6">
-              <h4 className="mb-4 font-serif text-lg sm:text-xl">{dict?.builder_your_order || 'Ваш заказ:'}</h4>
-              <ul className="mb-6 flex flex-col gap-2 text-sm text-muted-foreground">
-                <li className="flex justify-between">
-                  <span>{dict?.builder_weight || 'Вес:'}</span> <span className="text-foreground text-right">{weight} {dict?.builder_kg || 'кг'}</span>
+            <div className="w-full">
+              <h4 className="mb-3 font-serif text-lg text-white">{dict?.builder_your_order || 'Ваш заказ:'}</h4>
+              <ul className="mb-5 flex flex-col gap-2 text-xs sm:text-sm text-zinc-400">
+                <li className="flex justify-between items-center border-b border-white/10 pb-2">
+                  <span>{dict?.builder_weight || 'Вес:'}</span> <span className="font-medium text-white">{weight} {dict?.builder_kg || 'кг'}</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>{dict?.builder_biscuit || 'Бисквит:'}</span> <span className="text-foreground text-right">{biscuit?.name || dict?.builder_not_selected || 'Не выбран'}</span>
+                <li className="flex justify-between items-center border-b border-white/10 pb-2">
+                  <span>{dict?.builder_biscuit || 'Бисквит:'}</span> <span className="font-medium text-white text-right max-w-[65%] truncate">{biscuit?.name || dict?.builder_not_selected || 'Не выбран'}</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>{dict?.builder_filling || 'Начинка:'}</span> <span className="text-foreground text-right">{filling?.name || dict?.builder_not_selected || 'Не выбрана'}</span>
+                <li className="flex justify-between items-center border-b border-white/10 pb-2">
+                  <span>{dict?.builder_filling || 'Начинка:'}</span> <span className="font-medium text-white text-right max-w-[65%] truncate">{filling?.name || dict?.builder_not_selected || 'Не выбрана'}</span>
                 </li>
-                <li className="flex justify-between">
-                  <span>{dict?.builder_decoration || 'Декор:'}</span> <span className="text-foreground text-right">{decoration?.name || dict?.builder_no_decoration || 'Без декора'}</span>
+                <li className="flex justify-between items-center border-b border-white/10 pb-2">
+                  <span>{dict?.builder_decoration || 'Декор:'}</span> <span className="font-medium text-white text-right max-w-[65%] truncate">{decoration?.name || dict?.builder_no_decoration || 'Без декора'}</span>
                 </li>
               </ul>
               
-              <div className="mb-6 sm:mb-8 flex items-end justify-between border-t border-border pt-4 sm:pt-6">
-                <span className="font-serif text-base sm:text-lg">{dict?.builder_total || 'Итого:'}</span>
-                <span className="font-serif text-3xl sm:text-4xl text-primary">
+              <div className="mb-5 flex items-end justify-between text-white">
+                <span className="font-serif text-lg">{dict?.builder_total || 'Итого:'}</span>
+                {/* СТАЛО: Уменьшен размер цены */}
+                <span className="font-serif text-3xl sm:text-4xl text-[#D4B76A] font-bold">
                   {calculateTotal()} ₾
                 </span>
               </div>
 
               <div className="flex flex-col gap-3">
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-muted-foreground pointer-events-none">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[11px] sm:text-xs text-zinc-500 pointer-events-none">
                     {dict?.builder_date || 'Дата:'}
                   </span>
                   <input
@@ -282,7 +285,7 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
                     min={today}
                     value={deliveryDate}
                     onChange={(e) => setDeliveryDate(e.target.value)}
-                    className="w-full rounded-full border border-border/60 bg-transparent py-3 pl-[4rem] pr-4 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                    className={`${inputClass} pl-[4rem]`}
                     disabled={isSuccess || isSubmitting}
                   />
                 </div>
@@ -292,7 +295,7 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
                   value={deliveryAddress}
                   onChange={(e) => setDeliveryAddress(e.target.value)}
                   placeholder={dict?.builder_address || 'Адрес доставки (или самовывоз)'}
-                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                  className={inputClass}
                   disabled={isSuccess || isSubmitting}
                 />
                 
@@ -300,25 +303,25 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
                   type="text"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder={dict?.builder_phone || 'Ваш телефон (WhatsApp / Telegram)'}
-                  className="w-full rounded-full border border-border/60 bg-transparent px-4 sm:px-6 py-3 text-sm text-foreground outline-none transition-colors focus:border-primary"
+                  placeholder={dict?.builder_phone || 'WhatsApp / Telegram'}
+                  className={inputClass}
                   disabled={isSuccess || isSubmitting}
                 />
                 
                 <button
                   onClick={handleOrder}
                   disabled={isSuccess || isSubmitting}
-                  className={`mt-1 flex w-full items-center justify-center gap-2 rounded-full py-3 sm:py-4 text-sm tracking-wide text-primary-foreground transition-all ${
+                  className={`mt-1 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold tracking-wide text-zinc-950 shadow-md transition-all duration-300 ${
                     isSuccess 
-                      ? 'bg-green-500 hover:bg-green-600' 
-                      : 'bg-primary hover:-translate-y-1 hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30'
-                  } disabled:cursor-not-allowed disabled:opacity-90 disabled:hover:translate-y-0`}
+                      ? 'bg-emerald-500 shadow-emerald-500/30' 
+                      : 'bg-[#D4B76A] shadow-[#D4B76A]/20 hover:scale-[1.02] active:scale-95'
+                  } disabled:cursor-not-allowed disabled:opacity-90 disabled:hover:scale-100 disabled:active:scale-100`}
                 >
                   {isSubmitting ? (
-                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <Loader2 className="h-5 w-5 animate-spin text-zinc-950" />
                   ) : isSuccess ? (
                     <>
-                      <Check className="h-5 w-5" />
+                      <Check className="h-5 w-5 text-zinc-950" />
                       {dict?.builder_success || 'Заявка отправлена'}
                     </>
                   ) : (
@@ -328,7 +331,7 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
               </div>
               
               {isSuccess && (
-                <p className="mt-4 text-center text-xs text-muted-foreground">
+                <p className="mt-3 text-center text-xs text-emerald-400 font-medium">
                   {dict?.builder_success_desc || 'Мы свяжемся с вами в ближайшее время для подтверждения.'}
                 </p>
               )}

@@ -62,7 +62,7 @@ export async function Reviews({ lang, dict }: { lang: string; dict?: any }) {
         <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">
           <Link
             href={`/${lang}/reviews`}
-            className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm tracking-wide text-foreground transition-all hover:bg-foreground hover:text-background"
+            className="inline-flex h-14 items-center justify-center rounded-full border border-border/80 bg-background px-10 text-sm font-medium tracking-wide text-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-[#D4B76A]/50 hover:bg-[#D4B76A]/5 hover:text-[#D4B76A] hover:shadow-xl hover:shadow-[#D4B76A]/20 active:scale-95"
           >
             {dict?.reviews_btn || 'Читать все отзывы'}
           </Link>

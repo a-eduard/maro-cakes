@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
 const locales = [
-  { code: 'ru', label: 'RU', flag: '🇷🇺' },
-  { code: 'en', label: 'EN', flag: '🇬🇧' },
-  { code: 'ka', label: 'GE', flag: '🇬🇪' },
-  { code: 'uk', label: 'UK', flag: '🇺🇦' },
+  { code: 'ru', label: 'RU', flag: '/assets/flags/flag-ru.png' },
+  { code: 'en', label: 'EN', flag: '/assets/flags/flag-en.png' },
+  { code: 'ka', label: 'GE', flag: '/assets/flags/flag-ge.png' },
+  { code: 'uk', label: 'UK', flag: '/assets/flags/flag-ua.png' },
 ]
 
 export function SiteHeader({ dict }: { dict: any }) {
@@ -23,7 +23,7 @@ export function SiteHeader({ dict }: { dict: any }) {
   const router = useRouter()
 
   const currentLang = (params?.lang || params?.locale || 'ru') as string
-  const currentFlag = locales.find(l => l.code === currentLang)?.flag || '🇷🇺'
+  const currentFlag = locales.find(l => l.code === currentLang)?.flag || '/assets/flags/flag-ru.png'
   const displayLang = currentLang === 'ka' ? 'GE' : currentLang.toUpperCase()
 
   const handleLanguageChange = (newLocale: string) => {
@@ -52,20 +52,33 @@ export function SiteHeader({ dict }: { dict: any }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Переменная для контроля цвета в зависимости от скролла или открытого мобильного меню
+  const isDark = scrolled || isOpen
+
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-[1000] transition-all duration-500 ${
-          scrolled || isOpen ? 'bg-background/85 backdrop-blur-md border-b border-border/40 shadow-sm' : 'bg-transparent border-b border-transparent'
+      <header className={`fixed inset-x-0 top-0 z-[1000] transition-colors duration-500 ${
+          isDark ? 'bg-zinc-950 border-b border-white/10 shadow-lg' : 'bg-transparent border-b border-transparent'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 md:px-12 md:py-6">
-          <Link href={`/${currentLang}`} className="z-[1010] flex items-center" onClick={() => setIsOpen(false)}>
-            <Image src="/logo.png" alt="MarO Logo" width={120} height={50} priority className="w-auto h-auto object-contain md:h-[60px] md:w-[140px]" />
+          <Link href={`/${currentLang}`} className="z-[1010] flex items-center transition-all duration-300" onClick={() => setIsOpen(false)}>
+            {/* Если скролл есть — делаем лого белым, если нет — оставляем оригинальным */}
+            <Image 
+              src="/logo.png" 
+              alt="MarO Logo" 
+              width={120} 
+              height={50} 
+              priority 
+              className={`w-auto h-auto object-contain md:h-[60px] md:w-[140px] transition-all duration-300 ${isDark ? 'brightness-0 invert' : ''}`} 
+            />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="inline-block rounded-full px-5 py-2 text-sm tracking-wide text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary">
+              <Link key={item.href} href={item.href} className={`inline-block px-4 py-2 text-sm font-medium tracking-wide transition-colors ${
+                isDark ? 'text-zinc-300 hover:text-white' : 'text-zinc-600 hover:text-black'
+              }`}>
                 {item.label}
               </Link>
             ))}
@@ -73,23 +86,29 @@ export function SiteHeader({ dict }: { dict: any }) {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="relative group">
-              <button className="flex items-center gap-2 rounded-full border border-black/20 bg-black/5 px-4 py-2 text-sm font-bold text-black transition-all hover:bg-black/10">
-                <span className="text-lg leading-none">{currentFlag}</span>
+              <button className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
+                isDark ? 'border-white/10 bg-white/5 text-white hover:bg-white/10' : 'border-black/5 bg-black/5 text-black hover:bg-black/10'
+              }`}>
+                <Image src={currentFlag} alt="flag" width={20} height={20} className="rounded-full object-cover shadow-sm" />
                 <span>{displayLang}</span>
                 <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
               </button>
               
-              <div className="absolute top-full right-0 pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300">
-                <div className="flex flex-col gap-2 rounded-2xl bg-white border border-black/10 p-3 shadow-xl min-w-[120px]">
+              <div className="absolute top-full right-0 pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                <div className={`flex flex-col gap-1 rounded-2xl border p-2 min-w-[140px] ${
+                  isDark ? 'bg-zinc-900 border-white/10 shadow-2xl' : 'bg-white border-black/5 shadow-xl'
+                }`}>
                   {locales.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => handleLanguageChange(l.code)}
-                      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-bold transition-colors text-left ${
-                        currentLang === l.code ? 'bg-primary/10 text-primary' : 'text-gray-600 hover:bg-gray-100 hover:text-black'
+                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all text-left ${
+                        currentLang === l.code 
+                          ? (isDark ? 'bg-white/10 text-white' : 'bg-black/5 text-black')
+                          : (isDark ? 'text-zinc-400 hover:bg-white/5 hover:text-white' : 'text-zinc-600 hover:bg-black/5 hover:text-black')
                       }`}
                     >
-                      <span className="text-lg leading-none">{l.flag}</span> 
+                      <Image src={l.flag} alt={l.label} width={20} height={20} className="rounded-full object-cover shadow-sm" />
                       <span>{l.label}</span>
                     </button>
                   ))}
@@ -97,12 +116,13 @@ export function SiteHeader({ dict }: { dict: any }) {
               </div>
             </div>
 
-            <a href={`/${currentLang}#contacts`} className="inline-flex h-10 items-center justify-center rounded-full bg-primary px-6 text-sm tracking-wide text-primary-foreground transition-all hover:-translate-y-0.5">
+            {/* Золотая кнопка Заказать с единой анимацией */}
+            <a href={`/${currentLang}#contacts`} className="inline-flex h-10 items-center justify-center rounded-full bg-[#D4B76A] px-8 text-sm font-bold tracking-wide text-zinc-950 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D4B76A]/20 active:scale-95">
               {dict?.order || 'Заказать'}
             </a>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="z-[1010] p-2 text-foreground focus:outline-none lg:hidden">
+          <button onClick={() => setIsOpen(!isOpen)} className={`z-[1010] p-2 focus:outline-none lg:hidden ${isDark ? 'text-white' : 'text-black'}`}>
             {isOpen ? <X className="h-7 w-7" /> : <Menu className="h-7 w-7" />}
           </button>
         </div>
@@ -115,25 +135,26 @@ export function SiteHeader({ dict }: { dict: any }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-[990] flex h-[100dvh] w-full flex-col overflow-y-auto bg-background/95 backdrop-blur-md px-6 pb-32 pt-28 lg:hidden"
+            className="fixed inset-0 z-[990] flex h-[100dvh] w-full flex-col overflow-y-auto bg-zinc-950 px-6 pb-32 pt-28 lg:hidden"
           >
             <nav className="flex flex-col gap-6">
               {nav.map((item) => (
-                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-serif text-3xl font-light text-foreground transition-colors hover:text-primary">
+                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-serif text-3xl font-light text-zinc-300 transition-colors hover:text-white">
                   {item.label}
                 </Link>
               ))}
               
-              <div className="mt-8 flex flex-wrap justify-center gap-6 border-t border-border/60 pt-8">
+              <div className="mt-8 flex flex-wrap justify-center gap-6 border-t border-white/10 pt-8">
                 {locales.map((l) => (
                   <button
                     key={l.code}
                     onClick={() => handleLanguageChange(l.code)}
-                    className={`flex items-center gap-2 text-lg font-medium uppercase transition-colors ${
-                      currentLang === l.code ? 'text-primary font-bold' : 'text-muted-foreground hover:text-foreground'
+                    className={`flex items-center gap-2 text-lg font-medium uppercase transition-all ${
+                      currentLang === l.code ? 'text-white font-bold scale-110' : 'text-zinc-500 hover:text-zinc-300'
                     }`}
                   >
-                    <span>{l.flag}</span> <span>{l.label}</span>
+                    <Image src={l.flag} alt={l.label} width={24} height={24} className="rounded-full shadow-sm" /> 
+                    <span>{l.label}</span>
                   </button>
                 ))}
               </div>

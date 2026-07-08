@@ -11,11 +11,10 @@ interface Cake {
   price: number
   oldPrice?: number
   image: any
-  lqip?: string // Добавили поле для размытого превью
+  lqip?: string 
 }
 
 export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) {
-  // Добавили "lqip": image.asset->metadata.lqip в запрос
   const query = `*[_type == "cake" && isBestseller == true] | order(_createdAt desc)[0...8] {
     _id,
     "title": coalesce(title[$lang], title.ru),
@@ -61,10 +60,10 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
                       src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
                       alt={safeTitle}
                       fill
-                      priority={i < 2} // Высший приоритет только для первых 2 фото
-                      placeholder={cake.lqip ? "blur" : "empty"} // Включаем блюр
-                      blurDataURL={cake.lqip} // Передаем данные блюра
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" // Оптимизировали sizes
+                      priority={i < 2} 
+                      placeholder={cake.lqip ? "blur" : "empty"} 
+                      blurDataURL={cake.lqip} 
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" 
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   </div>
@@ -88,7 +87,7 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
         <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">
           <Link
             href={`/${currentLang}/prices`} 
-            className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm tracking-wide text-foreground transition-all hover:bg-foreground hover:text-background"
+            className="inline-flex h-14 items-center justify-center rounded-full border border-border/80 bg-background px-10 text-sm font-medium tracking-wide text-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-[#D4B76A]/50 hover:bg-[#D4B76A]/5 hover:text-[#D4B76A] hover:shadow-xl hover:shadow-[#D4B76A]/20 active:scale-95"
           >
             {dict?.bestsellers_btn || 'Посмотреть все торты'}
           </Link>

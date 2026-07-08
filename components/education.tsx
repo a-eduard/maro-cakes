@@ -40,12 +40,12 @@ export async function Education({ isDetailedView = false, lang, dict }: Educatio
                 />
               </div>
 
-              <div className="flex w-full flex-col md:w-1/2">
-                <span className="text-xs tracking-[0.3em] text-accent">
+              <div className="flex w-full flex-col items-start md:w-1/2">
+                <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
                   {dict?.education_tag || 'ОБУЧЕНИЕ'}
                 </span>
-                <h3 className="mt-4 font-serif text-2xl font-light md:text-4xl">{safeTitle}</h3>
-                <p className="mt-6 leading-relaxed text-muted-foreground whitespace-pre-line">
+                <h3 className="mt-4 font-serif text-3xl font-light text-foreground md:text-4xl">{safeTitle}</h3>
+                <p className="mt-6 text-lg leading-relaxed text-muted-foreground whitespace-pre-line">
                   {safeDesc}
                 </p>
               </div>
