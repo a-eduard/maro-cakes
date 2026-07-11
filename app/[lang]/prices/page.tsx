@@ -4,11 +4,11 @@ import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { Reveal } from '@/components/reveal'
 import { CakeBuilder } from '@/components/cake-builder'
+import { OrderButton } from '@/components/order-button'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { getDictionary } from '@/lib/dictionaries'
 
-// Динамические метаданные для SEO
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   const dict = await getDictionary(lang as any)
@@ -31,7 +31,6 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
   const { lang } = await params
   const dict = await getDictionary(lang as any)
 
-  // Запрашиваем торты
   const cakesQuery = `*[_type == "cake"] | order(_createdAt desc) {
     _id,
     "title": coalesce(title[$lang], title.ru),
@@ -42,7 +41,6 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
   }`
   const cakes: Cake[] = await client.fetch(cakesQuery, { lang }, { next: { revalidate: 60 } })
 
-  // Запрашиваем настройки конструктора (ДОБАВЛЕН matchName ДЛЯ ПОИСКА КАРТИНОК)
   const builderQuery = `*[_type == "cakeBuilder"][0] {
     ...,
     biscuits[] {
@@ -62,7 +60,6 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
   }`
   const builderData = await client.fetch(builderQuery, { lang }, { next: { revalidate: 60 } })
 
-  // Генерируем массив микроразметки Schema.org для товаров
   const jsonLd = cakes.map((cake) => ({
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -134,14 +131,9 @@ export default async function PricesPage({ params }: { params: Promise<{ lang: s
                             {cake.description}
                           </p>
                         )}
-                      </div>
-                      <div className="mt-6">
-                        <a
-                          href="#contacts"
-                          className="inline-flex h-10 w-full items-center justify-center rounded-full border border-brand-200 bg-brand-50/50 text-sm tracking-wide text-brand-950 transition-colors hover:bg-brand-400 hover:text-white"
-                        >
-                          {dict.header?.order || 'Заказать'}
-                        </a>
+                        
+                        {/* Интеграция кнопки вызова модального окна */}
+                        <OrderButton cake={cake} dict={dict} />
                       </div>
                     </article>
                   </Reveal>

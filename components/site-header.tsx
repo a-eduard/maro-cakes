@@ -8,10 +8,10 @@ import { motion, AnimatePresence } from 'motion/react'
 import { Menu, X, ChevronDown } from 'lucide-react'
 
 const locales = [
-  { code: 'ru', label: 'RU', flag: '/assets/flags/flag-ru.png' },
-  { code: 'en', label: 'EN', flag: '/assets/flags/flag-en.png' },
-  { code: 'ka', label: 'GE', flag: '/assets/flags/flag-ge.png' },
-  { code: 'uk', label: 'UK', flag: '/assets/flags/flag-ua.png' },
+  { code: 'ru', label: 'RU' },
+  { code: 'en', label: 'EN' },
+  { code: 'ka', label: 'GE' },
+  { code: 'uk', label: 'UK' },
 ]
 
 export function SiteHeader({ dict }: { dict: any }) {
@@ -23,7 +23,6 @@ export function SiteHeader({ dict }: { dict: any }) {
   const router = useRouter()
 
   const currentLang = (params?.lang || params?.locale || 'ru') as string
-  const currentFlag = locales.find(l => l.code === currentLang)?.flag || '/assets/flags/flag-ru.png'
   const displayLang = currentLang === 'ka' ? 'GE' : currentLang.toUpperCase()
 
   const handleLanguageChange = (newLocale: string) => {
@@ -34,17 +33,18 @@ export function SiteHeader({ dict }: { dict: any }) {
     router.refresh()
   }
 
+  // Убрали "Контакты", так как кнопка "Заказать" выполняет ту же функцию
+  // Часть кода из файла site-header.tsx
+
   const nav = [
     { label: dict?.gallery || 'Галерея', href: `/${currentLang}#gallery` },
     { label: dict?.about || 'О нас', href: `/${currentLang}#about` },
     { label: dict?.prices || 'Цены', href: `/${currentLang}#bestsellers` },
     { label: dict?.education || 'Обучение', href: `/${currentLang}#education` },
-    { label: dict?.reviews || 'Отзывы', href: `/${currentLang}#reviews` },
+    // Ссылка теперь ведет на отдельную страницу отзывов
+    { label: dict?.reviews || 'Отзывы', href: `/${currentLang}/reviews` },
     { label: dict?.blog || 'Блог', href: `/${currentLang}/blog` },
-    { label: dict?.faq || 'FAQ', href: `/${currentLang}/faq` },
-    { label: dict?.contacts || 'Контакты', href: `/${currentLang}#contacts` },
   ]
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
@@ -52,12 +52,13 @@ export function SiteHeader({ dict }: { dict: any }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Шапка теперь всегда прозрачная (без bg-zinc-950)
   const isDark = scrolled || isOpen
 
   return (
     <>
-      <header className={`fixed inset-x-0 top-0 z-[1000] transition-colors duration-500 ${
-          isDark ? 'bg-zinc-950 border-b border-white/10 shadow-lg' : 'bg-transparent border-b border-transparent'
+      <header className={`fixed inset-x-0 top-0 z-[1000] transition-all duration-500 ${
+          isDark ? 'backdrop-blur-md bg-white/5 border-b border-black/5 shadow-sm' : 'bg-transparent border-b border-transparent'
         }`}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-12 md:py-6">
@@ -68,15 +69,14 @@ export function SiteHeader({ dict }: { dict: any }) {
               width={120} 
               height={50} 
               priority 
-              className={`w-[100px] sm:w-[120px] md:h-[60px] md:w-[140px] h-auto object-contain transition-all duration-300 ${isDark ? 'brightness-0 invert' : ''}`} 
+              // Логотип всегда темный
+              className="w-[100px] sm:w-[120px] md:h-[60px] md:w-[140px] h-auto object-contain transition-all duration-300" 
             />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className={`inline-block px-4 py-2 text-sm font-medium tracking-wide transition-colors ${
-                isDark ? 'text-zinc-300 hover:text-white' : 'text-zinc-600 hover:text-black'
-              }`}>
+              <Link key={item.href} href={item.href} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-zinc-600 transition-colors hover:text-black">
                 {item.label}
               </Link>
             ))}
@@ -84,29 +84,23 @@ export function SiteHeader({ dict }: { dict: any }) {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="relative group">
-              <button className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-bold transition-all duration-300 ${
-                isDark ? 'border-white/10 bg-white/5 text-white hover:bg-white/10' : 'border-black/5 bg-black/5 text-black hover:bg-black/10'
-              }`}>
-                <Image src={currentFlag} alt="flag" width={20} height={20} className="rounded-full object-cover shadow-sm" />
+              <button className="flex items-center gap-2 rounded-full px-2 py-2 text-sm font-bold text-zinc-600 transition-all duration-300 hover:text-black">
                 <span>{displayLang}</span>
                 <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
               </button>
               
               <div className="absolute top-full right-0 pt-4 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                <div className={`flex flex-col gap-1 rounded-2xl border p-2 min-w-[140px] ${
-                  isDark ? 'bg-zinc-900 border-white/10 shadow-2xl' : 'bg-white border-black/5 shadow-xl'
-                }`}>
+                <div className="flex flex-col gap-1 rounded-2xl border border-black/5 bg-white p-2 min-w-[100px] shadow-xl">
                   {locales.map((l) => (
                     <button
                       key={l.code}
                       onClick={() => handleLanguageChange(l.code)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all text-left ${
+                      className={`flex w-full items-center justify-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all text-center ${
                         currentLang === l.code 
-                          ? (isDark ? 'bg-white/10 text-white' : 'bg-black/5 text-black')
-                          : (isDark ? 'text-zinc-400 hover:bg-white/5 hover:text-white' : 'text-zinc-600 hover:bg-black/5 hover:text-black')
+                          ? 'bg-black/5 text-black'
+                          : 'text-zinc-600 hover:bg-black/5 hover:text-black'
                       }`}
                     >
-                      <Image src={l.flag} alt={l.label} width={20} height={20} className="rounded-full object-cover shadow-sm" />
                       <span>{l.label}</span>
                     </button>
                   ))}
@@ -114,17 +108,19 @@ export function SiteHeader({ dict }: { dict: any }) {
               </div>
             </div>
 
-            <a href={`/${currentLang}#contacts`} className="inline-flex h-10 items-center justify-center rounded-full bg-[#D4B76A] px-8 text-sm font-bold tracking-wide text-zinc-950 shadow-md transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D4B76A]/20 active:scale-95">
+            {/* Кнопка "Заказать" теперь выглядит как обычная ссылка в меню */}
+            <a href={`/${currentLang}#contacts`} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-zinc-600 transition-colors hover:text-black">
               {dict?.order || 'Заказать'}
             </a>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className={`z-[1010] p-2 focus:outline-none lg:hidden ${isDark ? 'text-white' : 'text-black'}`}>
+          <button onClick={() => setIsOpen(!isOpen)} className="z-[1010] p-2 focus:outline-none lg:hidden text-black">
             {isOpen ? <X className="h-8 w-8" /> : <Menu className="h-8 w-8" />}
           </button>
         </div>
       </header>
 
+      {/* Мобильное меню оставляем темным, как и было */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -150,7 +146,6 @@ export function SiteHeader({ dict }: { dict: any }) {
                       currentLang === l.code ? 'bg-white/10 text-white font-bold border-white/30' : 'bg-transparent text-zinc-500 hover:text-zinc-300'
                     }`}
                   >
-                    <Image src={l.flag} alt={l.label} width={20} height={20} className="rounded-full shadow-sm" /> 
                     <span>{l.label}</span>
                   </button>
                 ))}

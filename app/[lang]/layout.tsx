@@ -3,16 +3,14 @@ import { Noto_Serif_Georgian, Noto_Sans_Georgian } from 'next/font/google'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
 import { CookieBanner } from '@/components/cookie-banner'
+import { WatermarkLines } from '@/components/watermark-lines' 
 
-// Настройка шрифта с засечками (для заголовков)
-// Убрали 'cyrillic', так как TypeScript строго требует только доступные для этого шрифта сабсеты
 const notoSerif = Noto_Serif_Georgian({
   subsets: ['latin', 'georgian'],
   variable: '--font-serif',
   display: 'swap',
 })
 
-// Настройка рубленого шрифта (для основного текста)
 const notoSans = Noto_Sans_Georgian({
   subsets: ['latin', 'georgian'],
   variable: '--font-sans',
@@ -42,7 +40,6 @@ export default async function RootLayout({
   const { lang } = await params
   const dict = await getDictionary(lang as any)
   
-  // Формируем микроразметку для кондитерской
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "Bakery",
@@ -74,9 +71,15 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>
-      {/* Применяем основной шрифт к body */}
-      <body className="font-sans antialiased bg-background text-foreground">
-        {children}
+      {/* Жестко задаем bg-white вместо bg-background для кристально чистого цвета */}
+      <body className="font-sans antialiased bg-white text-foreground relative z-0">
+        
+        <WatermarkLines /> 
+        
+        <div className="relative z-10">
+          {children}
+        </div>
+        
         <CookieBanner lang={lang} dict={dict.ui} />
       </body>
     </html>

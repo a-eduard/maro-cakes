@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Reveal } from '@/components/reveal'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
+import { OrderButton } from '@/components/order-button'
 
 interface Cake {
   _id: string
@@ -35,21 +36,20 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
   return (
     <section id="bestsellers" className="px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
       <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-12 flex flex-col gap-4 sm:mb-16 sm:gap-6 md:mb-24 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-xl">
-            <p className="mb-4 sm:mb-6 text-xs uppercase tracking-[0.35em] text-muted-foreground">
-              {dict?.bestsellers_overtitle || 'Торты на заказ'}
-            </p>
-            <h2 className="text-balance font-serif text-3xl font-light leading-tight text-foreground sm:text-4xl md:text-5xl">
-              {dict?.bestsellers_title || 'Любимые торты наших гостей'}
-            </h2>
-          </div>
+        
+        <Reveal className="mb-16 flex flex-col items-center text-center md:mb-24">
+          <h2 className="text-balance font-serif text-4xl font-light leading-tight text-foreground md:text-6xl">
+            {dict?.bestsellers_title || 'Flavour & Dessert Collection'}
+          </h2>
+          <p className="mt-6 max-w-3xl text-balance text-base leading-relaxed text-muted-foreground md:text-lg">
+            {dict?.bestsellers_desc || 'Авторские вкусы и десерты, созданные для ваших особенных моментов. Цена указана за 1 кг торта или базовую стоимость десерта. Итоговая цена зависит от веса, количества и индивидуального декора вашего заказа.'}
+          </p>
         </Reveal>
 
         {cakes.length > 0 ? (
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 sm:gap-y-14 lg:grid-cols-4">
             {cakes.map((cake, i) => {
-              const safeTitle = cake.title || 'Торт'
+              const safeTitle = cake.title || 'Десерт'
               const safeDesc = cake.description || ''
               
               return (
@@ -75,13 +75,16 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
                       </div>
                     </div>
                     {safeDesc && <p className="line-clamp-2 mt-2 text-sm text-muted-foreground">{safeDesc}</p>}
+                    
+                    {/* Интеграция кнопки вызова модального окна */}
+                    <OrderButton cake={cake} dict={dict} />
                   </div>
                 </article>
               </Reveal>
             )})}
           </div>
         ) : (
-          <p className="text-muted-foreground">{dict?.bestsellers_empty || 'Витрина пока пуста.'}</p>
+          <p className="text-center text-muted-foreground">{dict?.bestsellers_empty || 'Витрина пока пуста.'}</p>
         )}
 
         <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">

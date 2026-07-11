@@ -19,8 +19,8 @@ export async function About({ lang, dict }: { lang: string; dict?: any }) {
   const descText = about.description || dict?.about_desc || ''
 
   return (
-    // Заменили черный фон на элегантный светлый оттенок
-    <section id="about" className="bg-[#FCFBFA] px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40 border-y border-black/5">
+    // Убрали классы фона (bg-[#FCFBFA]) и границ, чтобы блок стал прозрачным
+    <section id="about" className="px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-8 sm:gap-12 md:grid-cols-2 md:items-center">
           <Reveal>

@@ -42,7 +42,7 @@ export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
             const span = (i === 0 || i === 3 || i === 4) ? 'row-span-2' : ''
             return (
               <Reveal key={img._id} delay={(i % 3) * 0.1} className={`overflow-hidden rounded-[1.25rem] sm:rounded-[1.5rem] transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 ${span}`}>
-                <div className="group relative h-full w-full bg-accent/5">
+                <div className="group relative h-full w-full">
                   <Image
                     src={img.image ? urlFor(img.image).url() : '/placeholder.svg'}
                     alt={img.title || 'Фото из галереи'}
