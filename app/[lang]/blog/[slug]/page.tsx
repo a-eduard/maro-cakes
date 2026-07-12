@@ -20,7 +20,7 @@ interface BlogPost {
   excerpt?: string
 }
 
-// Добавляем lang в параметры, так как мы находимся в папке [lang]
+// Добавляем lang в параметры
 type Props = {
   params: Promise<{ lang: string; slug: string }>
 }
@@ -28,10 +28,16 @@ type Props = {
 // 1. Динамическая генерация SEO-метатегов для Google
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params
-  const slug = resolvedParams.slug
+  const { lang, slug } = resolvedParams
 
-  const query = `*[_type == "post" && slug.current == $slug][0]`
-  const post = await client.fetch(query, { slug }, { next: { revalidate: 60 } })
+  // ИСПРАВЛЕНИЕ 1: Извлекаем строку для текущего языка через coalesce
+  const query = `*[_type == "post" && slug.current == $slug][0] {
+    "title": coalesce(title[$lang], title.ru),
+    "excerpt": coalesce(excerpt[$lang], excerpt.ru)
+  }`
+  
+  // Передаем переменную lang в запрос
+  const post = await client.fetch(query, { slug, lang }, { next: { revalidate: 60 } })
 
   if (!post) {
     return { title: 'Статья не найдена | MarO Батуми' }
@@ -48,30 +54,27 @@ export default async function BlogPostPage({ params }: Props) {
   const resolvedParams = await params
   const { lang, slug } = resolvedParams
 
-  // Подтягиваем нужный словарь для текущего языка
   const dict = await getDictionary(lang as any)
 
-  // Получаем конкретную статью по слагу (slug) из URL
+  // ИСПРАВЛЕНИЕ 2: Извлекаем мультиязычные поля title, excerpt и body
   const query = `*[_type == "post" && slug.current == $slug][0] {
-    title,
+    "title": coalesce(title[$lang], title.ru),
+    "excerpt": coalesce(excerpt[$lang], excerpt.ru),
+    "body": coalesce(body[$lang], body.ru),
     mainImage,
     image,
-    publishedAt,
-    body,
-    excerpt
+    publishedAt
   }`
   
-  const post: BlogPost = await client.fetch(query, { slug }, { next: { revalidate: 60 } })
+  // Передаем переменную lang в запрос
+  const post: BlogPost = await client.fetch(query, { slug, lang }, { next: { revalidate: 60 } })
 
-  // Если статья не найдена в базе, Next.js автоматически отдаст красивую страницу 404
   if (!post) {
     notFound()
   }
 
-  // Sanity может сохранять обложку как mainImage или image в зависимости от настроек шаблона
   const postCover = post.mainImage || post.image
 
-  // Простая функция для форматирования даты в зависимости от языка
   const getLocaleForDate = (locale: string) => {
     switch (locale) {
       case 'en': return 'en-US'
@@ -83,14 +86,12 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="relative flex min-h-screen flex-col">
-      {/* Передаем dict в шапку */}
       <SiteHeader dict={dict.header} />
 
       <main className="flex-1 pt-32 pb-24 md:pt-48 md:pb-40">
         <article className="px-6 md:px-12">
           <div className="mx-auto max-w-3xl">
             
-            {/* Шапка статьи */}
             <Reveal className="mb-12 text-center md:mb-16">
               <time className="mb-6 block text-sm tracking-widest text-muted-foreground uppercase">
                 {new Date(post.publishedAt).toLocaleDateString(getLocaleForDate(lang), {
@@ -104,7 +105,6 @@ export default async function BlogPostPage({ params }: Props) {
               </h1>
             </Reveal>
 
-            {/* Обложка статьи */}
             {postCover && (
               <Reveal delay={0.2} className="relative mb-16 aspect-[16/9] w-full overflow-hidden rounded-[2rem] border border-border/50 shadow-sm md:mb-24">
                 <Image
@@ -118,7 +118,6 @@ export default async function BlogPostPage({ params }: Props) {
               </Reveal>
             )}
 
-            {/* Текст статьи (PortableText от Sanity) */}
             <Reveal delay={0.3} className="mx-auto max-w-2xl">
               <div className="space-y-6 text-lg leading-relaxed text-muted-foreground [&>h2]:pt-10 [&>h2]:font-serif [&>h2]:text-3xl [&>h2]:text-foreground [&>h3]:pt-8 [&>h3]:font-serif [&>h3]:text-2xl [&>h3]:text-foreground [&>p]:mb-6 [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>blockquote]:border-l-4 [&>blockquote]:border-brand-400 [&>blockquote]:pl-6 [&>blockquote]:italic [&>blockquote]:text-foreground/80">
                 {post.body ? (
@@ -129,11 +128,10 @@ export default async function BlogPostPage({ params }: Props) {
               </div>
             </Reveal>
 
-            {/* Кнопка "Назад в блог" */}
             <Reveal delay={0.4} className="mt-20 border-t border-border/60 pt-10 text-center">
               <Link
                 href={`/${lang}/blog`}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-brand-400 hover:text-brand-500"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-[#D4B76A] hover:text-[#D4B76A]"
               >
                 {dict.ui?.bestsellers_btn || 'Вернуться к списку статей'}
               </Link>
@@ -143,7 +141,6 @@ export default async function BlogPostPage({ params }: Props) {
         </article>
       </main>
 
-      {/* Передаем lang и dict в подвал */}
       <SiteFooter lang={lang} dict={dict.ui} />
     </div>
   )

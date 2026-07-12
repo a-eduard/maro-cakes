@@ -1,70 +1,86 @@
 'use client'
 
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+
 export function WatermarkLines() {
+  const pathname = usePathname() || ''
+  
+  // Проверяем, находимся ли мы на главной странице
+  const isHomePage = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
+
+  // Настройка для коротких страниц (по умолчанию Фиолетовый)
+  let vectorSrc = '/vectors/lil-vector.png'
+  let positionClass = 'fixed -left-[15vw] -top-[5vh] h-[60vh] w-[90vw] md:-left-[5vw] md:w-[60vw] -z-50'
+  let alignClass = 'object-contain object-top'
+
+  if (!isHomePage) {
+    if (pathname.includes('/blog') || pathname.includes('/reviews')) {
+      vectorSrc = '/vectors/lil-vector.png' 
+      alignClass = 'object-contain object-top'
+    } else if (pathname.includes('/faq') || pathname.includes('/prices')) {
+      vectorSrc = '/vectors/green-vector.png' 
+      positionClass = 'fixed -right-[15vw] top-[15vh] h-[60vh] w-[90vw] md:-right-[5vw] md:w-[60vw] -z-50'
+      alignClass = 'object-contain object-right'
+    } else {
+      vectorSrc = '/vectors/yellow-vector.png' 
+      positionClass = 'fixed -left-[10vw] bottom-[10vh] h-[60vh] w-[90vw] md:-left-[5vw] md:w-[60vw] -z-50'
+      alignClass = 'object-contain object-bottom'
+    }
+  }
+
   return (
-    // absolute left-0 right-0 top-0 bottom-0: Жестко растягивает контейнер от самого верха до самого низа документа
-    <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 z-[-50] overflow-hidden opacity-40">
-      
-      {/* 1. ВЕРХНИЙ (Всегда прибит к шапке) */}
-      <div 
-        className="absolute left-[-10%] top-0 h-[800px] w-[120%] bg-[#8E6BBF] mix-blend-multiply md:h-[1200px]"
-        style={{
-          WebkitMaskImage: 'url(/vectors/lil-vector.png)',
-          WebkitMaskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'top left',
-          maskImage: 'url(/vectors/lil-vector.png)',
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'top left',
-        }}
-      />
+    <>
+      {isHomePage ? (
+        // ==========================================
+        // ГЛАВНАЯ СТРАНИЦА: Абсолютное позиционирование по контенту
+        // ==========================================
+        <div className="pointer-events-none absolute inset-0 -z-50 overflow-hidden">
+          <div className="absolute inset-0 opacity-90 mix-blend-multiply">
+            
+            {/* 1. ЗЕЛЕНЫЙ: Блок Галерея (Справа) */}
+            <div className="absolute right-[-10vw] top-[2%] h-[800px] w-[120vw] md:h-[1400px] md:w-[100vw]">
+              <Image 
+                src="/vectors/green-vector.png" 
+                alt="Green Pattern" 
+                fill 
+                className="object-contain object-right-top" 
+                priority 
+              />
+            </div>
 
-      {/* 2. ЦЕНТРАЛЬНЫЙ 1 (Распределяется по первой трети страницы) */}
-      <div 
-        className="absolute right-[-10%] top-[30%] h-[1000px] w-[120%] bg-[#1F6F5B] mix-blend-multiply md:h-[1400px]"
-        style={{
-          WebkitMaskImage: 'url(/vectors/green-vector.png)',
-          WebkitMaskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'center right',
-          maskImage: 'url(/vectors/green-vector.png)',
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center right',
-        }}
-      />
+            {/* 2. ФИОЛЕТОВЫЙ: О нас и Цены (Слева) */}
+            <div className="absolute left-[-15vw] top-[35%] h-[800px] w-[120vw] md:h-[1400px] md:w-[100vw]">
+              <Image 
+                src="/vectors/lil-vector.png" 
+                alt="Lilac Pattern" 
+                fill 
+                className="object-contain object-left" 
+              />
+            </div>
 
-      {/* 3. ЦЕНТРАЛЬНЫЙ 2 (Распределяется по второй трети страницы) */}
-      <div 
-        className="absolute left-[-10%] top-[65%] h-[1000px] w-[120%] bg-[#8E6BBF] mix-blend-multiply md:h-[1400px]"
-        style={{
-          WebkitMaskImage: 'url(/vectors/lil-vector.png)',
-          WebkitMaskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'center left',
-          maskImage: 'url(/vectors/lil-vector.png)',
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'center left',
-        }}
-      />
+            {/* 3. ЖЕЛТЫЙ: Обучение и Подвал (Справа) */}
+            <div className="absolute right-[-10vw] bottom-[1%] h-[800px] w-[120vw] md:h-[1400px] md:w-[100vw]">
+              <Image 
+                src="/vectors/yellow-vector.png" 
+                alt="Yellow Pattern" 
+                fill 
+                className="object-contain object-right-bottom" 
+              />
+            </div>
 
-      {/* 4. НИЖНИЙ (Всегда прибит к подвалу и блоку Обучения) */}
-      <div 
-        className="absolute right-[-10%] bottom-0 h-[800px] w-[120%] bg-[#FF6C3A] mix-blend-multiply md:h-[1200px]"
-        style={{
-          WebkitMaskImage: 'url(/vectors/yellow-vector.png)',
-          WebkitMaskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'bottom right',
-          maskImage: 'url(/vectors/yellow-vector.png)',
-          maskSize: 'contain',
-          maskRepeat: 'no-repeat',
-          maskPosition: 'bottom right',
-        }}
-      />
-
-    </div>
+          </div>
+        </div>
+      ) : (
+        // ==========================================
+        // КОРОТКИЕ СТРАНИЦЫ: 1 фиксированный вектор
+        // ==========================================
+        <div className="pointer-events-none opacity-90 mix-blend-multiply">
+          <div className={positionClass}>
+            <Image src={vectorSrc} alt="Background Pattern" fill className={alignClass} priority />
+          </div>
+        </div>
+      )}
+    </>
   )
 }
