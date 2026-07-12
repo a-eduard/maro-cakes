@@ -1,19 +1,14 @@
 import type { Metadata } from 'next'
-import { Noto_Serif_Georgian, Noto_Sans_Georgian } from 'next/font/google'
+import { Manrope } from 'next/font/google'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
 import { CookieBanner } from '@/components/cookie-banner'
 import { WatermarkLines } from '@/components/watermark-lines' 
 
-const notoSerif = Noto_Serif_Georgian({
-  subsets: ['latin', 'georgian'],
-  variable: '--font-serif',
-  display: 'swap',
-})
-
-const notoSans = Noto_Sans_Georgian({
-  subsets: ['latin', 'georgian'],
-  variable: '--font-sans',
+// Подключаем Manrope с поддержкой латиницы и кириллицы
+const manrope = Manrope({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-manrope',
   display: 'swap',
 })
 
@@ -64,15 +59,15 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={lang} className={`${notoSerif.variable} ${notoSans.variable} scroll-smooth`} data-scroll-behavior="smooth">
+    <html lang={lang} className={`${manrope.variable} scroll-smooth`} data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>
-      {/* Жестко задаем bg-white вместо bg-background для кристально чистого цвета */}
-      <body className="font-sans antialiased bg-white text-foreground relative z-0">
+      {/* Применяем глобальный цвет текста #3F372F ко всему приложению */}
+      <body className="font-sans antialiased bg-white text-[#3F372F] relative z-0">
         
         <WatermarkLines /> 
         
