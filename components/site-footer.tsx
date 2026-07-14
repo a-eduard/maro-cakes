@@ -47,8 +47,9 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
 
         <Reveal delay={0.2}>
           <div className="mt-12 flex flex-col items-center gap-2 text-center text-lg leading-relaxed text-muted-foreground md:mt-16">
-            <p>{data.address}</p>
-            <p>{data.workingHours}</p>
+            {/* Используем dict и класс whitespace-pre-line, чтобы работали переносы строк \n */}
+            <p className="whitespace-pre-line">{dict?.address || data.address}</p>
+            <p className="whitespace-pre-line">{dict?.workingHours || data.workingHours}</p>
           </div>
         </Reveal>
 
