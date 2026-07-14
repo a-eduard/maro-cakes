@@ -18,7 +18,6 @@ interface OrderModalProps {
 }
 
 export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
-  // Добавляем состояние для веса (по умолчанию 2 кг)
   const [weight, setWeight] = useState<number>(2)
   const [deliveryDate, setDeliveryDate] = useState('')
   const [deliveryAddress, setDeliveryAddress] = useState('')
@@ -30,7 +29,6 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
 
   const today = new Date().toISOString().split('T')[0]
   
-  // Динамический расчет итоговой стоимости
   const totalPrice = cake ? cake.price * weight : 0
 
   const handleOrder = async () => {
@@ -70,7 +68,7 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
           setDeliveryAddress('')
           setPhone('')
           setWishes('')
-          setWeight(2) // Сбрасываем вес при закрытии
+          setWeight(2) 
         }, 3000)
       } else {
         alert(dict?.alert_error || 'Ошибка при отправке.')
@@ -82,7 +80,7 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
     }
   }
 
-  const inputClass = "w-full rounded-xl border border-white/10 bg-zinc-900/50 px-4 py-2.5 text-sm text-white outline-none transition-all placeholder:text-zinc-500 focus:border-[#D4B76A] focus:bg-zinc-900"
+  const inputClass = "w-full rounded-xl border border-[#D6AD1C]/50 bg-white px-4 py-2.5 text-sm text-[#3F372F] outline-none transition-all placeholder:text-[#3F372F]/40 focus:border-[#D6AD1C] focus:bg-white"
 
   return (
     <AnimatePresence>
@@ -93,27 +91,26 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[2000] bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[2000] bg-black/40 backdrop-blur-sm"
           />
 
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="fixed left-1/2 top-1/2 z-[2010] w-[95%] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2rem] bg-zinc-950 shadow-2xl border border-white/10"
+            className="fixed left-1/2 top-1/2 z-[2010] w-[95%] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[2rem] bg-[#FFF8E1] shadow-2xl border border-[#D6AD1C]/30"
           >
             <button 
               onClick={onClose}
-              className="absolute right-4 top-4 z-10 rounded-full bg-zinc-900/50 p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+              className="absolute right-4 top-4 z-10 rounded-full bg-black/5 p-2 text-[#3F372F]/60 transition-colors hover:bg-black/10 hover:text-[#3F372F]"
             >
               <X className="h-5 w-5" />
             </button>
 
             <div className="p-6 md:p-8 flex flex-col max-h-[90vh] overflow-y-auto">
-              {/* Шапка модалки с изображением и динамической ценой */}
-              <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-6">
+              <div className="mb-6 flex items-center justify-between border-b border-[#3F372F]/10 pb-6">
                 <div className="flex items-center gap-4">
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-white/5 shadow-md">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-white shadow-sm">
                     <Image
                       src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
                       alt={cake.title}
@@ -122,29 +119,28 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
                     />
                   </div>
                   <div>
-                    <h3 className="font-serif text-lg font-light text-white leading-tight pr-4">{cake.title}</h3>
-                    <p className="mt-1 text-xs text-zinc-400">{cake.price} ₾ / {dict?.builder_kg || 'кг'}</p>
+                    <h3 className="font-serif text-lg font-bold text-[#3F372F] leading-tight pr-4">{cake.title}</h3>
+                    <p className="mt-1 text-xs text-[#3F372F]/70">{cake.price} ₾ / {dict?.builder_kg || 'кг'}</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-zinc-500 mb-1">{dict?.builder_total || 'Итого:'}</p>
-                  <p className="font-serif text-2xl font-bold text-[#D4B76A]">{totalPrice} ₾</p>
+                  <p className="text-xs text-[#3F372F]/60 mb-1">{dict?.builder_total || 'Итого:'}</p>
+                  <p className="font-serif text-2xl font-bold text-[#3F372F]">{totalPrice} ₾</p>
                 </div>
               </div>
 
               <div className="flex flex-col gap-5">
-                {/* Выбор веса */}
                 <div>
-                  <h4 className="mb-2 text-sm font-medium text-white">{dict?.builder_step_1 || '1. Вес торта (кг)'}</h4>
+                  <h4 className="mb-2 text-sm font-medium text-[#3F372F]">{dict?.builder_step_1 || '1. Вес торта (кг)'}</h4>
                   <div className="flex flex-wrap gap-2">
                     {[1, 1.5, 2, 2.5, 3, 4, 5].map((w) => (
                       <button
                         key={w}
                         onClick={() => setWeight(w)}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-300 active:scale-95 ${
+                        className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-300 active:scale-95 border ${
                           weight === w
-                            ? 'bg-[#D4B76A] text-zinc-950 shadow-sm shadow-[#D4B76A]/20'
-                            : 'bg-zinc-900/50 text-zinc-400 border border-white/10 hover:border-white/30 hover:text-white'
+                            ? 'bg-[#F3D35F] border-[#D6AD1C] text-[#3F372F] shadow-sm'
+                            : 'bg-white border-[#D6AD1C]/30 text-[#3F372F]/70 hover:border-[#D6AD1C] hover:text-[#3F372F]'
                         }`}
                       >
                         {w} {dict?.builder_kg || 'кг'}
@@ -153,10 +149,9 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
                   </div>
                 </div>
 
-                {/* Форма контактов */}
-                <div className="flex flex-col gap-3 border-t border-white/10 pt-5">
+                <div className="flex flex-col gap-3 border-t border-[#3F372F]/10 pt-5">
                   <div className="relative">
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-zinc-500 pointer-events-none">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-[#3F372F]/50 pointer-events-none">
                       {dict?.builder_date || 'Дата:'}
                     </span>
                     <input
@@ -205,17 +200,17 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
                 <button
                   onClick={handleOrder}
                   disabled={isSuccess || isSubmitting}
-                  className={`mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold tracking-wide text-zinc-950 shadow-md transition-all duration-300 ${
+                  className={`mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-sm font-bold tracking-wide text-[#3F372F] border shadow-md transition-all duration-300 ${
                     isSuccess 
-                      ? 'bg-emerald-500 shadow-emerald-500/30' 
-                      : 'bg-[#D4B76A] shadow-[#D4B76A]/20 hover:scale-[1.02] active:scale-95'
+                      ? 'bg-emerald-500 border-emerald-600 shadow-emerald-500/30' 
+                      : 'bg-[#F3D35F] border-[#D6AD1C] shadow-[#D6AD1C]/20 hover:scale-[1.02] active:scale-95'
                   } disabled:cursor-not-allowed disabled:opacity-90 disabled:hover:scale-100 disabled:active:scale-100`}
                 >
                   {isSubmitting ? (
-                    <Loader2 className="h-5 w-5 animate-spin text-zinc-950" />
+                    <Loader2 className="h-5 w-5 animate-spin text-[#3F372F]" />
                   ) : isSuccess ? (
                     <>
-                      <Check className="h-5 w-5 text-zinc-950" />
+                      <Check className="h-5 w-5 text-[#3F372F]" />
                       {dict?.builder_success || 'Заявка отправлена'}
                     </>
                   ) : (

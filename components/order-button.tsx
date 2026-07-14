@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import dynamic from 'next/dynamic'
 
-// Динамический импорт: код модалки не грузится, пока не понадобится
 const OrderModal = dynamic(
   () => import('@/components/order-modal').then(mod => mod.OrderModal),
   { ssr: false }
@@ -28,12 +27,11 @@ export function OrderButton({ cake, dict }: OrderButtonProps) {
     <div className="mt-auto pt-6 w-full">
       <button
         onClick={() => setIsOpen(true)}
-        className="flex h-10 w-full items-center justify-center rounded-full border border-black/10 bg-transparent text-sm font-medium tracking-wide text-foreground transition-all duration-300 hover:border-[#D4B76A] hover:bg-[#D4B76A] hover:text-white active:scale-95"
+        className="flex h-10 w-full items-center justify-center rounded-full border border-black/10 bg-transparent text-sm font-medium tracking-wide text-foreground transition-all duration-300 hover:border-[#D6AD1C] hover:bg-[#F3D35F] hover:text-[#3F372F] active:scale-95"
       >
         {orderText}
       </button>
       
-      {/* Рендерим компонент только если он открыт */}
       {isOpen && (
         <OrderModal 
           isOpen={isOpen} 
