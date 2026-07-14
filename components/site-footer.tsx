@@ -1,5 +1,4 @@
 import { Reveal } from '@/components/reveal'
-import { Flourish } from '@/components/flourish'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -14,19 +13,16 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
 
   return (
     <footer id="contacts" className="relative overflow-hidden border-t border-border px-6 pt-24 pb-12 md:px-12 md:pt-40">
-      <Flourish flip className="pointer-events-none absolute inset-x-0 top-0 h-24 w-full text-border/40" />
-
+      {/* Анимированные горизонтальные линии (Flourish) полностью удалены */}
       <div className="mx-auto max-w-7xl flex flex-col items-center text-center">
         <Reveal>
           <h2 className="font-serif text-5xl font-light text-foreground md:text-7xl">
             {dict?.footer_title || 'Contacts'}
           </h2>
-          {/* Красная волнистая линия удалена отсюда */}
         </Reveal>
 
         <Reveal delay={0.1}>
           <div className="mt-16 flex flex-col items-center justify-center gap-12 md:mt-24 md:flex-row md:gap-32">
-            {/* Instagram */}
             <a href={data.instagram} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 transition-all duration-300 hover:-translate-y-1">
               <span className="font-serif text-3xl font-light text-foreground transition-colors duration-300 group-hover:text-[#D4B76A] md:text-4xl">Instagram</span>
               <span className="text-lg text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
@@ -34,7 +30,6 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
               </span>
             </a>
 
-            {/* WhatsApp */}
             <a href={`tel:${data.whatsapp.replace(/[^0-9+]/g, '')}`} className="group flex flex-col items-center gap-2 transition-all duration-300 hover:-translate-y-1">
               <span className="font-serif text-3xl font-light text-foreground transition-colors duration-300 group-hover:text-[#D4B76A] md:text-4xl">WhatsApp</span>
               <span className="text-lg text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
@@ -42,7 +37,6 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
               </span>
             </a>
 
-            {/* Telegram */}
             <a href={data.telegram} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 transition-all duration-300 hover:-translate-y-1">
               <span className="font-serif text-3xl font-light text-foreground transition-colors duration-300 group-hover:text-[#D4B76A] md:text-4xl">Telegram</span>
               <span className="text-lg text-muted-foreground transition-colors duration-300 group-hover:text-foreground">
@@ -59,7 +53,6 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
           </div>
         </Reveal>
 
-        {/* Нижняя полоса с копирайтом */}
         <div className="mt-24 flex w-full flex-col items-center justify-between gap-6 border-t border-border pt-10 text-sm text-muted-foreground md:flex-row">
           <Link href={`/${lang}`} className="flex items-center transition-transform hover:scale-105">
             <Image src="/logo.png" alt="Logo" width={100} height={40} className="object-contain" />
