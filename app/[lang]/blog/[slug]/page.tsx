@@ -131,9 +131,10 @@ export default async function BlogPostPage({ params }: Props) {
             <Reveal delay={0.4} className="mt-20 border-t border-border/60 pt-10 text-center">
               <Link
                 href={`/${lang}/blog`}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-border bg-transparent px-8 text-sm tracking-wide text-foreground transition-all hover:border-[#D4B76A] hover:text-[#D4B76A]"
+                // Заменили ключ словаря и добавили hover-эффект с розовой подсветкой #FF9FB2
+                className="inline-flex h-14 items-center justify-center rounded-full border border-border/80 bg-background px-10 text-sm font-medium tracking-wide text-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-[#FF9FB2]/60 hover:bg-transparent hover:text-[#FF9FB2] hover:shadow-xl hover:shadow-[#FF9FB2]/20 active:scale-95"
               >
-                {dict.ui?.bestsellers_btn || 'Вернуться к списку статей'}
+                {dict.ui?.back_to_blog || 'Вернуться в блог'}
               </Link>
             </Reveal>
 

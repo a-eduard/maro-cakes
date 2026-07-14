@@ -63,7 +63,7 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
                 {dict.header?.blog || 'Наш блог'}
               </h1>
               <p className="mt-6 text-lg text-muted-foreground">
-                {dict.ui?.blog_desc || 'Полезные статьи, тренды в дизайне тортов и секреты кондитерского мастерства.'}
+                {dict.ui?.blog_subtitle || 'Полезные статьи, тренды в дизайне тортов и секреты кондитерского мастерства.'}
               </p>
             </Reveal>
 

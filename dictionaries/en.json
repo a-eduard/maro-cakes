@@ -8,7 +8,7 @@
     "blog": "Blog",
     "faq": "FAQ",
     "contacts": "Contacts",
-    "order": "Order Now",
+    "order": "Order",
     "checkout": "Checkout"
   },
   "ui": {
@@ -72,7 +72,10 @@
     "alert_network": "Network error. Please check your connection.",
     "cookies_text": "We use cookies to improve site performance and analytics. By continuing to use the site, you agree to our",
     "cookies_policy": "Privacy Policy",
-    "cookies_accept": "Accept"
+    "cookies_accept": "Accept",
+    "order": "Order",
+    "blog_subtitle": "Useful articles, cake design trends, and secrets of pastry mastery.",
+    "seo_title": "MarO | Signature Cakes"
   },
   "privacy": {
     "title": "Privacy Policy",

@@ -26,9 +26,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params
   const dict = await getDictionary(lang as any)
+  
   return {
-    title: dict.seo?.title || 'MarO | Авторские торты в Батуми',
-    description: dict.seo?.description || 'Авторские торты и десерты на заказ.',
+    // Теперь заголовок динамически подтягивается из словаря
+    title: dict.ui?.seo_title || 'MarO | Авторские торты',
+    description: dict.ui?.gallery_desc || 'Авторские торты и десерты на заказ.',
   }
 }
 

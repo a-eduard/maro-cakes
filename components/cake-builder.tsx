@@ -319,7 +319,7 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
                       {dict?.builder_success || 'Заявка отправлена'}
                     </>
                   ) : (
-                    dict?.builder_order_btn || 'Заказать'
+                    dict?.checkout || 'Оформить заказать'
                   )}
                 </button>
               </div>
