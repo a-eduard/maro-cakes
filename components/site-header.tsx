@@ -69,7 +69,7 @@ export function SiteHeader({ dict }: { dict: any }) {
 
           <nav className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
-              <Link key={item.href} href={item.href} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-[#3F372F]/70 transition-colors hover:text-[#3F372F]">
+              <Link key={item.href} href={item.href} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-[#5A524A] transition-colors hover:text-[#3F372F]">
                 {item.label}
               </Link>
             ))}
@@ -77,7 +77,7 @@ export function SiteHeader({ dict }: { dict: any }) {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="relative group">
-              <button className="flex items-center gap-2 rounded-full px-2 py-2 text-sm font-medium text-[#3F372F]/70 transition-all duration-300 hover:text-[#3F372F]">
+              <button className="flex items-center gap-2 rounded-full px-2 py-2 text-sm font-medium text-[#5A524A] transition-all duration-300 hover:text-[#3F372F]">
                 <span>{displayLang}</span>
                 <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
               </button>
@@ -91,7 +91,7 @@ export function SiteHeader({ dict }: { dict: any }) {
                       className={`flex w-full items-center justify-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-all text-center ${
                         currentLang === l.code 
                           ? 'bg-[#F3D35F]/20 text-[#3F372F]'
-                          : 'text-[#3F372F]/70 hover:bg-[#F3D35F]/10 hover:text-[#3F372F]'
+                          : 'text-[#5A524A] hover:bg-[#F3D35F]/10 hover:text-[#3F372F]'
                       }`}
                     >
                       <span>{l.label}</span>
@@ -101,7 +101,7 @@ export function SiteHeader({ dict }: { dict: any }) {
               </div>
             </div>
 
-            <a href={`/${currentLang}#contacts`} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-[#3F372F]/70 transition-colors hover:text-[#3F372F]">
+            <a href={`/${currentLang}#contacts`} className="inline-block px-4 py-2 text-sm font-medium tracking-wide text-[#5A524A] transition-colors hover:text-[#3F372F]">
               {dict?.order || 'Заказать'}
             </a>
           </div>
@@ -123,7 +123,7 @@ export function SiteHeader({ dict }: { dict: any }) {
           >
             <nav className="flex flex-col gap-8">
               {nav.map((item) => (
-                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-sans text-3xl font-medium text-[#3F372F]/80 transition-colors hover:text-[#3F372F]">
+                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-sans text-3xl font-medium text-[#5A524A] transition-colors hover:text-[#3F372F]">
                   {item.label}
                 </Link>
               ))}
@@ -134,7 +134,7 @@ export function SiteHeader({ dict }: { dict: any }) {
                     key={l.code}
                     onClick={() => handleLanguageChange(l.code)}
                     className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all ${
-                      currentLang === l.code ? 'bg-[#F3D35F] text-[#3F372F] border-[#D6AD1C]' : 'bg-transparent text-[#3F372F]/60 border-[#3F372F]/20 hover:text-[#3F372F]'
+                      currentLang === l.code ? 'bg-[#F3D35F] text-[#3F372F] border-[#D6AD1C]' : 'bg-transparent text-[#5A524A] border-[#3F372F]/20 hover:text-[#3F372F]'
                     }`}
                   >
                     <span>{l.label}</span>

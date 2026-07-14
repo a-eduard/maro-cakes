@@ -34,14 +34,14 @@ export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
   const galleryTitle = dict?.gallery_title || 'Авторские торты и десерты в Батуми'
 
   return (
-    // Уменьшили нижний отступ: pb-12 sm:pb-16 md:pb-20
     <section id="gallery" className="px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 md:px-12 md:pb-20 md:pt-40">
       <div className="mx-auto max-w-7xl">
         <Reveal className="mb-12 text-center sm:mb-16 md:mb-20">
           <h1 className="mx-auto max-w-4xl text-balance font-sans text-5xl font-medium leading-[1.05] tracking-tight text-[#3F372F] sm:text-5xl md:text-7xl">
             {formatTitle(galleryTitle)}
           </h1>
-          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-pretty text-base font-medium leading-relaxed text-[#3F372F]/70 md:text-lg">
+          {/* Обновленный цвет для резкости: убрали прозрачность и поставили solid HEX */}
+          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-pretty text-base font-medium leading-relaxed text-[#5A524A] md:text-lg">
             {dict?.gallery_desc || 'Натуральные ингредиенты. Индивидуальный дизайн. Авторские начинки.'}
           </p>
         </Reveal>

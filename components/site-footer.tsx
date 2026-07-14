@@ -55,12 +55,20 @@ export function SiteFooter({ lang, dict }: { lang: string; dict?: any }) {
         <div className="mt-20 flex w-full flex-col items-center justify-between gap-6 border-t border-border pt-10 text-sm text-muted-foreground md:flex-row">
           
           <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
-            <p>© {new Date().getFullYear()} MarO</p>
-            <span className="hidden md:inline text-border">|</span>
-            <p>
-              Created by <a href="https://exapp.tech/" target="_blank" rel="noopener noreferrer" className="font-medium text-foreground transition-colors hover:text-[#D4B76A]">exAPP</a>
-            </p>
-          </div>
+  <p>© {new Date().getFullYear()} MarO</p>
+  <span className="hidden md:inline text-border">|</span>
+  <p>
+    Created by{" "}
+    <a 
+      href="https://exapp.tech/" 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="font-medium text-foreground transition-all duration-300 hover:text-[#00E5FF] hover:drop-shadow-[0_0_8px_rgba(0,229,255,0.5)]"
+    >
+      exAPP
+    </a>
+  </p>
+</div>
 
           <div className="flex flex-wrap items-center justify-center gap-6">
             <Link href={`/${lang}/faq`} className="underline-offset-4 transition-colors hover:text-[#D4B76A] hover:underline">
