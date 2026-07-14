@@ -51,8 +51,8 @@ export function SiteHeader({ dict }: { dict: any }) {
 
   return (
     <>
-      {/* Шапка теперь всегда полностью белая (bg-white). Легкая тень появляется только при скролле вниз */}
-      <header className={`fixed inset-x-0 top-0 z-[1000] bg-white transition-all duration-500 ${
+      {/* Добавлен класс font-sans ко всему контейнеру header для принудительного наследования Manrope */}
+      <header className={`fixed inset-x-0 top-0 z-[1000] bg-white font-sans transition-all duration-500 ${
           scrolled ? 'shadow-sm border-b border-[#3F372F]/5' : 'border-b border-transparent'
         }`}
       >
@@ -113,7 +113,6 @@ export function SiteHeader({ dict }: { dict: any }) {
         </div>
       </header>
 
-      {/* Мобильное меню также обновлено на светлую тему, чтобы соответствовать шапке */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -121,11 +120,12 @@ export function SiteHeader({ dict }: { dict: any }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="fixed inset-0 z-[990] flex h-[100dvh] w-full flex-col overflow-y-auto bg-white px-6 pb-24 pt-28 lg:hidden"
+            className="fixed inset-0 z-[990] flex h-[100dvh] w-full flex-col overflow-y-auto bg-white px-6 pb-24 pt-28 lg:hidden font-sans"
           >
             <nav className="flex flex-col gap-8">
               {nav.map((item) => (
-                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-serif text-3xl font-light text-[#3F372F]/80 transition-colors hover:text-[#3F372F]">
+                // Убрали font-serif, добавили font-sans
+                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-sans text-3xl font-light text-[#3F372F]/80 transition-colors hover:text-[#3F372F]">
                   {item.label}
                 </Link>
               ))}
