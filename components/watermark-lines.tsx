@@ -15,8 +15,9 @@ export function WatermarkLines() {
     maskRepeat: "no-repeat",
   }
 
-  // Изменили позиционирование: теперь вектор строго прижат вправо (right-0)
-  const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[100vw] md:h-[900px] opacity-10 right-0 [mask-position:right_center] [-webkit-mask-position:right_center]"
+  // Увеличили ширину до 140vw (было 100vw) и высоту до 1200px, 
+  // а также сдвинули вправо на -15vw, чтобы края уходили за экран
+  const baseClasses = "pointer-events-none absolute w-[200vw] h-[800px] md:w-[140vw] md:h-[1200px] opacity-10 right-[-20vw] md:right-[-15vw] [mask-position:right_center] [-webkit-mask-position:right_center]"
 
   if (!isHomePage) {
     let colorClass = 'bg-[#1F6F5B]' 
@@ -41,7 +42,7 @@ export function WatermarkLines() {
 
   return (
     <div className="pointer-events-none absolute inset-0 -z-50 overflow-hidden">
-      <div className={`${baseClasses} bg-[#1F6F5B] top-[12vh]`} style={maskStyle} />
+      <div className={`${baseClasses} bg-[#1F6F5B] top-[10vh]`} style={maskStyle} />
       <div className={`${baseClasses} bg-[#8E6BBF] top-[28%]`} style={maskStyle} />
       <div className={`${baseClasses} bg-[#F3D35A] top-[48%]`} style={maskStyle} />
       <div className={`${baseClasses} bg-[#FF6C3A] top-[68%]`} style={maskStyle} />
