@@ -1,14 +1,21 @@
 import type { Metadata } from 'next'
-import { Manrope } from 'next/font/google'
+import { Manrope, Noto_Sans_Georgian } from 'next/font/google'
 import { getDictionary } from '@/lib/dictionaries'
 import '@/app/globals.css'
 import { CookieBanner } from '@/components/cookie-banner'
 import { WatermarkLines } from '@/components/watermark-lines' 
 
-// Подключаем Manrope с поддержкой латиницы и кириллицы
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600'], 
   variable: '--font-manrope',
+  display: 'swap',
+})
+
+const notoSansGeorgian = Noto_Sans_Georgian({
+  subsets: ['georgian'],
+  weight: ['400', '500', '600'],
+  variable: '--font-georgian',
   display: 'swap',
 })
 
@@ -59,15 +66,15 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={lang} className={`${manrope.variable} scroll-smooth`} data-scroll-behavior="smooth">
+    <html lang={lang} className={`${manrope.variable} ${notoSansGeorgian.variable} scroll-smooth`} data-scroll-behavior="smooth">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
         />
       </head>
-      {/* Применяем глобальный цвет текста #3F372F ко всему приложению */}
-      <body className="font-sans antialiased bg-white text-[#3F372F] relative z-0">
+      {/* Добавлен font-medium, чтобы вес 500 применялся ко всему тексту по умолчанию */}
+      <body className="font-sans font-medium antialiased bg-white text-[#3F372F] relative z-0">
         
         <WatermarkLines /> 
         

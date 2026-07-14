@@ -51,7 +51,6 @@ export function SiteHeader({ dict }: { dict: any }) {
 
   return (
     <>
-      {/* Добавлен класс font-sans ко всему контейнеру header для принудительного наследования Manrope */}
       <header className={`fixed inset-x-0 top-0 z-[1000] bg-white font-sans transition-all duration-500 ${
           scrolled ? 'shadow-sm border-b border-[#3F372F]/5' : 'border-b border-transparent'
         }`}
@@ -78,7 +77,7 @@ export function SiteHeader({ dict }: { dict: any }) {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="relative group">
-              <button className="flex items-center gap-2 rounded-full px-2 py-2 text-sm font-bold text-[#3F372F]/70 transition-all duration-300 hover:text-[#3F372F]">
+              <button className="flex items-center gap-2 rounded-full px-2 py-2 text-sm font-medium text-[#3F372F]/70 transition-all duration-300 hover:text-[#3F372F]">
                 <span>{displayLang}</span>
                 <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
               </button>
@@ -124,8 +123,7 @@ export function SiteHeader({ dict }: { dict: any }) {
           >
             <nav className="flex flex-col gap-8">
               {nav.map((item) => (
-                // Убрали font-serif, добавили font-sans
-                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-sans text-3xl font-light text-[#3F372F]/80 transition-colors hover:text-[#3F372F]">
+                <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="block font-sans text-3xl font-medium text-[#3F372F]/80 transition-colors hover:text-[#3F372F]">
                   {item.label}
                 </Link>
               ))}
@@ -136,7 +134,7 @@ export function SiteHeader({ dict }: { dict: any }) {
                     key={l.code}
                     onClick={() => handleLanguageChange(l.code)}
                     className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all ${
-                      currentLang === l.code ? 'bg-[#F3D35F] text-[#3F372F] border-[#D6AD1C] font-bold' : 'bg-transparent text-[#3F372F]/60 border-[#3F372F]/20 hover:text-[#3F372F]'
+                      currentLang === l.code ? 'bg-[#F3D35F] text-[#3F372F] border-[#D6AD1C]' : 'bg-transparent text-[#3F372F]/60 border-[#3F372F]/20 hover:text-[#3F372F]'
                     }`}
                   >
                     <span>{l.label}</span>

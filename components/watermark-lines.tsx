@@ -15,8 +15,8 @@ export function WatermarkLines() {
     maskRepeat: "no-repeat",
   }
 
-  // Единый класс для всех векторов: одинаковый размер, прозрачность и выравнивание маски по левому краю
-  const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[100vw] md:h-[900px] opacity-10 left-[-10vw] [mask-position:left_center] [-webkit-mask-position:left_center]"
+  // Изменили позиционирование: теперь вектор строго прижат вправо (right-0)
+  const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[100vw] md:h-[900px] opacity-10 right-0 [mask-position:right_center] [-webkit-mask-position:right_center]"
 
   if (!isHomePage) {
     let colorClass = 'bg-[#1F6F5B]' 
@@ -39,42 +39,13 @@ export function WatermarkLines() {
     )
   }
 
-  // ==========================================
-  // ГЛАВНАЯ СТРАНИЦА: Абсолютно одинаковые векторы
-  // ==========================================
   return (
     <div className="pointer-events-none absolute inset-0 -z-50 overflow-hidden">
-      
-      {/* БЛОК 1 (Зеленый) */}
-      <div 
-        className={`${baseClasses} bg-[#1F6F5B] top-[12vh]`} 
-        style={maskStyle} 
-      />
-
-      {/* БЛОК 2 (Фиолетовый) */}
-      <div 
-        className={`${baseClasses} bg-[#8E6BBF] top-[28%]`} 
-        style={maskStyle} 
-      />
-
-      {/* БЛОК 3 (Желтый) */}
-      <div 
-        className={`${baseClasses} bg-[#F3D35A] top-[48%]`} 
-        style={maskStyle} 
-      />
-
-      {/* БЛОК 4 (Оранжевый) */}
-      <div 
-        className={`${baseClasses} bg-[#FF6C3A] top-[68%]`} 
-        style={maskStyle} 
-      />
-
-      {/* БЛОК 5 (Розовый) */}
-      <div 
-        className={`${baseClasses} bg-[#FF9FB2] top-[88%]`} 
-        style={maskStyle} 
-      />
-
+      <div className={`${baseClasses} bg-[#1F6F5B] top-[12vh]`} style={maskStyle} />
+      <div className={`${baseClasses} bg-[#8E6BBF] top-[28%]`} style={maskStyle} />
+      <div className={`${baseClasses} bg-[#F3D35A] top-[48%]`} style={maskStyle} />
+      <div className={`${baseClasses} bg-[#FF6C3A] top-[68%]`} style={maskStyle} />
+      <div className={`${baseClasses} bg-[#FF9FB2] top-[88%]`} style={maskStyle} />
     </div>
   )
 }
