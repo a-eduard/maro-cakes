@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 
 export function WatermarkLines() {
   const pathname = usePathname() || ''
-  
   const isHomePage = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
 
   const maskStyle = {
@@ -16,11 +15,12 @@ export function WatermarkLines() {
     maskRepeat: "no-repeat",
   }
 
-  const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[110vw] md:h-[900px] opacity-10"
+  // Единый класс для всех векторов: одинаковый размер, прозрачность и выравнивание маски по левому краю
+  const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[100vw] md:h-[900px] opacity-10 left-[-10vw] [mask-position:left_center] [-webkit-mask-position:left_center]"
 
   if (!isHomePage) {
     let colorClass = 'bg-[#1F6F5B]' 
-    let positionClass = 'fixed -left-[10vw] top-[15vh] [mask-position:center] [-webkit-mask-position:center] -z-50'
+    let positionClass = 'fixed top-[15vh] -z-50'
 
     if (pathname.includes('/gallery')) {
       colorClass = 'bg-[#8E6BBF]' 
@@ -34,44 +34,44 @@ export function WatermarkLines() {
 
     return (
       <div className="pointer-events-none fixed inset-0 -z-50 overflow-hidden bg-white">
-        <div 
-          className={`${baseClasses} ${positionClass} ${colorClass}`} 
-          style={maskStyle} 
-        />
+        <div className={`${baseClasses} ${positionClass} ${colorClass}`} style={maskStyle} />
       </div>
     )
   }
 
+  // ==========================================
+  // ГЛАВНАЯ СТРАНИЦА: Абсолютно одинаковые векторы
+  // ==========================================
   return (
     <div className="pointer-events-none absolute inset-0 -z-50 overflow-hidden">
       
-      {/* 1. Блок 1 (Начало/Герой) — Зеленый. Опустили вниз на 12vh */}
+      {/* БЛОК 1 (Зеленый) */}
       <div 
-        className={`${baseClasses} bg-[#1F6F5B] left-[-15vw] top-[12vh] [mask-position:left_top] [-webkit-mask-position:left_top]`} 
+        className={`${baseClasses} bg-[#1F6F5B] top-[12vh]`} 
         style={maskStyle} 
       />
 
-      {/* 2. Блок 2 (Галерея) — Фиолетовый */}
+      {/* БЛОК 2 (Фиолетовый) */}
       <div 
-        className={`${baseClasses} bg-[#8E6BBF] right-[-10vw] top-[22%] [mask-position:right_center] [-webkit-mask-position:right_center]`} 
+        className={`${baseClasses} bg-[#8E6BBF] top-[28%]`} 
         style={maskStyle} 
       />
 
-      {/* 3. Блок 3 (О нас) — Желтый */}
+      {/* БЛОК 3 (Желтый) */}
       <div 
-        className={`${baseClasses} bg-[#F3D35A] left-[-20vw] top-[42%] [mask-position:left_center] [-webkit-mask-position:left_center]`} 
+        className={`${baseClasses} bg-[#F3D35A] top-[48%]`} 
         style={maskStyle} 
       />
 
-      {/* 4. Блок 4 (Цены/Конструктор) — Оранжевый */}
+      {/* БЛОК 4 (Оранжевый) */}
       <div 
-        className={`${baseClasses} bg-[#FF6C3A] right-[-10vw] top-[64%] [mask-position:right_center] [-webkit-mask-position:right_center]`} 
+        className={`${baseClasses} bg-[#FF6C3A] top-[68%]`} 
         style={maskStyle} 
       />
 
-      {/* 5. Блок 5 (Обучение/Отзывы) — Розовый */}
+      {/* БЛОК 5 (Розовый) */}
       <div 
-        className={`${baseClasses} bg-[#FF9FB2] left-[-15vw] top-[82%] [mask-position:left_bottom] [-webkit-mask-position:left_bottom]`} 
+        className={`${baseClasses} bg-[#FF9FB2] top-[88%]`} 
         style={maskStyle} 
       />
 
