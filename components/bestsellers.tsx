@@ -39,9 +39,9 @@ export async function Bestsellers({ lang, dict }: { lang: string; dict?: any }) 
       <div className="mx-auto max-w-7xl">
         
         <Reveal className="mb-12 flex flex-col items-center text-center md:mb-16">
-          <h2 className="text-balance font-sans text-4xl font-medium leading-tight text-foreground md:text-5xl">
-            {dict?.bestsellers_title || 'Любимые торты наших гостей'}
-          </h2>
+          <h2 className="text-balance font-sans text-4xl font-medium tracking-tight leading-[1.05] text-foreground md:text-5xl">
+  {dict?.bestsellers_title || 'Любимые торты наших гостей'}
+</h2>
           <p className="mt-6 max-w-3xl text-balance text-base leading-relaxed text-muted-foreground md:text-lg">
             {dict?.bestsellers_desc || 'Авторские вкусы и десерты, созданные для ваших особенных моментов. Цена указана за 1 кг торта или базовую стоимость десерта. Итоговая цена зависит от веса, количества и индивидуального декора вашего заказа.'}
           </p>

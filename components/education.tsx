@@ -42,7 +42,9 @@ export async function Education({ isDetailedView = false, lang, dict }: Educatio
               </div>
 
               <div className="flex w-full flex-col items-start md:w-1/2">
-                <h3 className="mt-4 font-sans text-3xl font-medium text-foreground md:text-4xl">{safeTitle}</h3>
+                <h3 className="mt-4 font-sans text-3xl font-medium tracking-tight leading-[1.05] text-foreground md:text-4xl">
+  {safeTitle}
+</h3>
                 <p className="mt-6 text-lg leading-relaxed text-muted-foreground whitespace-pre-line">
                   {safeDesc}
                 </p>

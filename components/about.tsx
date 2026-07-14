@@ -36,9 +36,9 @@ export async function About({ lang, dict }: { lang: string; dict?: any }) {
           </Reveal>
           
           <Reveal delay={0.2} className="flex flex-col gap-4 sm:gap-6">
-            <h2 className="font-sans text-3xl font-medium leading-tight text-foreground sm:text-4xl md:text-5xl">
-              {titleText}
-            </h2>
+            <h2 className="font-sans text-3xl font-medium tracking-tight leading-[1.05] text-foreground sm:text-4xl md:text-5xl">
+  {titleText}
+</h2>
             <p className="whitespace-pre-line leading-relaxed text-muted-foreground text-lg">
               {descText}
             </p>
