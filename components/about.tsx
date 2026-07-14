@@ -15,12 +15,12 @@ export async function About({ lang, dict }: { lang: string; dict?: any }) {
 
   if (!about) return null
 
-  const titleText = about.title || dict?.about_title || 'О кондитерской MarO'
+  const titleText = about.title || dict?.about_title || 'Больше, чем просто десерты'
   const descText = about.description || dict?.about_desc || ''
 
   return (
-    // Убрали классы фона (bg-[#FCFBFA]) и границ, чтобы блок стал прозрачным
-    <section id="about" className="px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
+    // Изменили отступы: py-12 sm:py-16 md:py-20
+    <section id="about" className="px-4 py-12 sm:px-6 sm:py-16 md:px-12 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 gap-8 sm:gap-12 md:grid-cols-2 md:items-center">
           <Reveal>
@@ -36,10 +36,7 @@ export async function About({ lang, dict }: { lang: string; dict?: any }) {
           </Reveal>
           
           <Reveal delay={0.2} className="flex flex-col gap-4 sm:gap-6">
-            <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-              {dict?.about_tag || 'О нас'}
-            </p>
-            <h2 className="font-serif text-3xl font-light leading-tight text-foreground sm:text-4xl md:text-5xl">
+            <h2 className="font-sans text-3xl font-medium leading-tight text-foreground sm:text-4xl md:text-5xl">
               {titleText}
             </h2>
             <p className="whitespace-pre-line leading-relaxed text-muted-foreground text-lg">

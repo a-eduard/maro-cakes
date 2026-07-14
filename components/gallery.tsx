@@ -22,17 +22,26 @@ export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
 
   if (!images || images.length === 0) return null
 
+  const formatTitle = (text: string) => {
+    if (!text) return null
+    const parts = text.split(' и ')
+    if (parts.length === 2) {
+      return <>{parts[0]} <br /> и {parts[1]}</>
+    }
+    return text
+  }
+
+  const galleryTitle = dict?.gallery_title || 'Авторские торты и десерты в Батуми'
+
   return (
-    <section id="gallery" className="px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-36 md:px-12 md:pb-40 md:pt-48">
+    // Уменьшили нижний отступ: pb-12 sm:pb-16 md:pb-20
+    <section id="gallery" className="px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 md:px-12 md:pb-20 md:pt-40">
       <div className="mx-auto max-w-7xl">
-        <Reveal className="mb-12 text-center sm:mb-16 md:mb-24">
-          <p className="mb-6 sm:mb-8 text-xs uppercase tracking-[0.35em] text-muted-foreground">
-            {dict?.gallery_subtitle || 'Бутик-кондитерская · Батуми'}
-          </p>
-          <h1 className="mx-auto max-w-4xl text-balance font-serif text-4xl font-light leading-[1.05] tracking-tight text-foreground sm:text-5xl md:text-7xl">
-            {dict?.gallery_title || 'Авторские торты и десерты в Батуми'}
+        <Reveal className="mb-12 text-center sm:mb-16 md:mb-20">
+          <h1 className="mx-auto max-w-4xl text-balance font-sans text-5xl font-medium leading-[1.05] tracking-tight text-[#3F372F] sm:text-5xl md:text-7xl">
+            {formatTitle(galleryTitle)}
           </h1>
-          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-pretty text-sm sm:text-base leading-relaxed text-muted-foreground md:text-lg">
+          <p className="mx-auto mt-6 sm:mt-8 max-w-xl text-pretty text-base font-medium leading-relaxed text-[#3F372F]/70 md:text-lg">
             {dict?.gallery_desc || 'Натуральные ингредиенты. Индивидуальный дизайн. Авторские начинки.'}
           </p>
         </Reveal>
@@ -59,10 +68,10 @@ export async function Gallery({ lang, dict }: { lang: string; dict?: any }) {
           })}
         </div>
 
-        <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16 md:mt-24">
+        <Reveal delay={0.4} className="mt-12 flex justify-center sm:mt-16">
           <Link 
             href={`/${lang}/gallery`} 
-            className="inline-flex h-14 items-center justify-center rounded-full border border-border/80 bg-background px-10 text-sm font-medium tracking-wide text-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-[#D4B76A]/50 hover:bg-[#D4B76A]/5 hover:text-[#D4B76A] hover:shadow-xl hover:shadow-[#D4B76A]/20 active:scale-95"
+            className="inline-flex h-14 items-center justify-center rounded-full border border-border/80 bg-background px-10 text-sm font-medium tracking-wide text-foreground shadow-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:border-[#1F6F5B]/60 hover:bg-transparent hover:text-[#1F6F5B] hover:shadow-xl hover:shadow-[#1F6F5B]/20 active:scale-95"
           >
             {dict?.gallery_btn || 'Смотреть всю галерею'}
           </Link>

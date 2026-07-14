@@ -25,7 +25,8 @@ export async function Education({ isDetailedView = false, lang, dict }: Educatio
   const safeDesc = edu.description || dict?.education_desc || ''
 
   return (
-    <section id="education" className="relative px-4 py-16 sm:px-6 sm:py-24 md:px-12 md:py-40">
+    // Изменили отступы: py-12 sm:py-16 md:py-20
+    <section id="education" className="relative px-4 py-12 sm:px-6 sm:py-16 md:px-12 md:py-20">
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-5xl">
           <Reveal>
@@ -41,10 +42,7 @@ export async function Education({ isDetailedView = false, lang, dict }: Educatio
               </div>
 
               <div className="flex w-full flex-col items-start md:w-1/2">
-                <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-                  {dict?.education_tag || 'ОБУЧЕНИЕ'}
-                </span>
-                <h3 className="mt-4 font-serif text-3xl font-light text-foreground md:text-4xl">{safeTitle}</h3>
+                <h3 className="mt-4 font-sans text-3xl font-medium text-foreground md:text-4xl">{safeTitle}</h3>
                 <p className="mt-6 text-lg leading-relaxed text-muted-foreground whitespace-pre-line">
                   {safeDesc}
                 </p>
