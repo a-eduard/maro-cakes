@@ -80,7 +80,8 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
     }
   }
 
-  const inputClass = "w-full rounded-xl border border-[#D6AD1C]/50 bg-white px-4 py-2.5 text-sm text-[#3F372F] outline-none transition-all placeholder:text-[#3F372F]/40 focus:border-[#D6AD1C] focus:bg-white"
+  // Убрали bg-white, поставили bg-transparent
+  const inputClass = "w-full rounded-xl border border-[#D6AD1C]/40 bg-transparent px-4 py-2.5 text-sm text-[#3F372F] outline-none transition-all placeholder:text-[#3F372F]/40 focus:border-[#D6AD1C] focus:bg-transparent"
 
   return (
     <AnimatePresence>
@@ -102,7 +103,7 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
           >
             <button 
               onClick={onClose}
-              className="absolute right-4 top-4 z-10 rounded-full bg-black/5 p-2 text-[#3F372F]/60 transition-colors hover:bg-black/10 hover:text-[#3F372F]"
+              className="absolute right-4 top-4 z-10 rounded-full bg-transparent p-2 text-[#3F372F]/60 transition-colors hover:bg-black/5 hover:text-[#3F372F]"
             >
               <X className="h-5 w-5" />
             </button>
@@ -110,7 +111,7 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
             <div className="p-6 md:p-8 flex flex-col max-h-[90vh] overflow-y-auto">
               <div className="mb-6 flex items-center justify-between border-b border-[#3F372F]/10 pb-6">
                 <div className="flex items-center gap-4">
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-white shadow-sm">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full border border-white/50 shadow-sm">
                     <Image
                       src={cake.image ? urlFor(cake.image).url() : '/placeholder.svg'}
                       alt={cake.title}
@@ -140,7 +141,7 @@ export function OrderModal({ isOpen, onClose, cake, dict }: OrderModalProps) {
                         className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-300 active:scale-95 border ${
                           weight === w
                             ? 'bg-[#F3D35F] border-[#D6AD1C] text-[#3F372F] shadow-sm'
-                            : 'bg-white border-[#D6AD1C]/30 text-[#3F372F]/70 hover:border-[#D6AD1C] hover:text-[#3F372F]'
+                            : 'bg-transparent border-[#D6AD1C]/40 text-[#3F372F]/70 hover:border-[#D6AD1C] hover:bg-[#D6AD1C]/5 hover:text-[#3F372F]'
                         }`}
                       >
                         {w} {dict?.builder_kg || 'кг'}

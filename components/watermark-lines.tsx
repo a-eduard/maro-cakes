@@ -5,10 +5,8 @@ import { usePathname } from 'next/navigation'
 export function WatermarkLines() {
   const pathname = usePathname() || ''
   
-  // Проверяем, находимся ли мы на главной странице
   const isHomePage = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
 
-  // Общий стиль маскирования. 
   const maskStyle = {
     WebkitMaskImage: "url('/vectors/vector-main.svg')",
     maskImage: "url('/vectors/vector-main.svg')",
@@ -18,8 +16,6 @@ export function WatermarkLines() {
     maskRepeat: "no-repeat",
   }
 
-  // ИСПРАВЛЕНИЕ: Меняем opacity-100 на opacity-10 (10% непрозрачности).
-  // Теперь векторы станут легкими водяными знаками, а не яркими пятнами.
   const baseClasses = "pointer-events-none absolute w-[150vw] h-[600px] md:w-[110vw] md:h-[900px] opacity-10"
 
   if (!isHomePage) {
@@ -46,15 +42,12 @@ export function WatermarkLines() {
     )
   }
 
-  // ==========================================
-  // ГЛАВНАЯ СТРАНИЦА
-  // ==========================================
   return (
     <div className="pointer-events-none absolute inset-0 -z-50 overflow-hidden">
       
-      {/* 1. Блок 1 (Начало/Герой) — Зеленый */}
+      {/* 1. Блок 1 (Начало/Герой) — Зеленый. Опустили вниз на 12vh */}
       <div 
-        className={`${baseClasses} bg-[#1F6F5B] left-[-15vw] top-0 [mask-position:left_top] [-webkit-mask-position:left_top]`} 
+        className={`${baseClasses} bg-[#1F6F5B] left-[-15vw] top-[12vh] [mask-position:left_top] [-webkit-mask-position:left_top]`} 
         style={maskStyle} 
       />
 

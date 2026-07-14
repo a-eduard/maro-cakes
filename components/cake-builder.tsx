@@ -113,14 +113,16 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
   const fallbackImage = data.combinations?.[0]?.image ? urlFor(data.combinations[0].image).url() : '/placeholder.svg'
   const displayImageUrl = currentCombo?.image ? urlFor(currentCombo.image).url() : fallbackImage
 
+  // Убрали bg-white у неактивных кнопок, заменили на bg-transparent
   const optionButtonClass = (isActive: boolean) => 
     `rounded-xl border px-2 py-2 sm:px-3 sm:py-2 text-left transition-all duration-300 active:scale-95 flex flex-col justify-center ${
       isActive
-        ? 'border-[#D6AD1C] bg-[#F3D35F]/20 shadow-sm scale-[1.02]'
-        : 'border-[#D6AD1C]/30 bg-white hover:border-[#D6AD1C] hover:scale-[1.02]'
+        ? 'border-[#D6AD1C] bg-[#F3D35F]/30 shadow-sm scale-[1.02]'
+        : 'border-[#D6AD1C]/40 bg-transparent hover:border-[#D6AD1C] hover:bg-[#D6AD1C]/5 hover:scale-[1.02]'
     }`
 
-  const inputClass = "w-full rounded-xl border border-[#D6AD1C]/50 bg-white px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm text-[#3F372F] outline-none transition-all placeholder:text-[#3F372F]/40 focus:border-[#D6AD1C] focus:bg-white"
+  // Убрали bg-white у инпутов, заменили на bg-transparent
+  const inputClass = "w-full rounded-xl border border-[#D6AD1C]/40 bg-transparent px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm text-[#3F372F] outline-none transition-all placeholder:text-[#3F372F]/40 focus:border-[#D6AD1C] focus:bg-transparent"
 
   return (
     <div className="mx-0 sm:mx-auto max-w-5xl rounded-[1.25rem] sm:rounded-[2rem] bg-[#FFF8E1] p-4 sm:p-6 md:p-8 text-left shadow-2xl border border-[#D6AD1C]/20">
@@ -137,7 +139,7 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
                   className={`rounded-lg px-3 py-1 text-xs sm:text-sm font-medium transition-all duration-300 active:scale-95 border ${
                     weight === w
                       ? 'bg-[#F3D35F] border-[#D6AD1C] text-[#3F372F] scale-105 shadow-sm'
-                      : 'bg-white border-[#D6AD1C]/30 text-[#3F372F]/70 hover:border-[#D6AD1C] hover:text-[#3F372F] hover:scale-105'
+                      : 'bg-transparent border-[#D6AD1C]/40 text-[#3F372F]/70 hover:border-[#D6AD1C] hover:bg-[#D6AD1C]/5 hover:text-[#3F372F] hover:scale-105'
                   }`}
                 >
                   {w} {dict?.builder_kg || 'кг'}
@@ -215,8 +217,9 @@ export function CakeBuilder({ data, dict }: CakeBuilderProps) {
         </div>
 
         <div className="flex h-full flex-col">
-          <div className="sticky top-20 flex flex-col items-center rounded-2xl bg-white/60 p-4 sm:p-6 border border-[#D6AD1C]/20 shadow-sm">
-            <div className="relative mb-4 aspect-square w-full max-w-[100px] sm:max-w-[140px] overflow-hidden rounded-full shadow-lg border-2 border-white">
+          {/* Убрали bg-white/60, заменили на bg-transparent */}
+          <div className="sticky top-20 flex flex-col items-center rounded-2xl bg-transparent p-4 sm:p-6 border border-[#D6AD1C]/30 shadow-sm">
+            <div className="relative mb-4 aspect-square w-full max-w-[100px] sm:max-w-[140px] overflow-hidden rounded-full shadow-lg border-2 border-white/50">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={displayImageUrl}
